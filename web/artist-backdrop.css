@@ -1,0 +1,26 @@
+/* Artist photography in front and behind the web now-playing screen. */
+img.snow-artist-foreground {
+  content: var(--snow-artist-photo) !important;
+  object-fit: contain !important;
+  object-position: center;
+}
+
+.fs-full-screen-player-module-background-image.snow-artist-backdrop,
+.fs-mobile-fullscreen-player-module-background-image.snow-artist-backdrop {
+  background-image: var(--snow-artist-photo) !important;
+  background-position: center 28% !important;
+  background-size: cover;
+}
+
+.fs-full-screen-player-module-background-image-overlay,
+.fs-mobile-fullscreen-player-module-background-image-overlay {
+  backdrop-filter: blur(0.18rem) !important;
+  background: linear-gradient(180deg, rgba(3, 7, 5, 0.20), rgba(3, 7, 5, 0.30) 48%, rgba(3, 7, 5, 0.80)) !important;
+}
+
+@media (orientation: portrait) {
+  .fs-mobile-fullscreen-player-module-background-image.snow-artist-backdrop,
+  .fs-full-screen-player-module-background-image.snow-artist-backdrop {
+    background-position: center 22% !important;
+  }
+}

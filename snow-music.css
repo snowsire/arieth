@@ -1,0 +1,80 @@
+/* Snow Music: emerald accents over dark glass. */
+:root {
+  --snow-accent: rgb(30, 215, 96);
+}
+
+.fs-left-sidebar-module-container {
+  background: linear-gradient(165deg, rgba(30, 215, 96, 0.075), transparent 48%), rgb(7, 11, 10);
+  border-right: 1px solid rgba(30, 215, 96, 0.12);
+}
+
+.fs-sidebar-item-module-link {
+  border-radius: 10px !important;
+  transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
+}
+
+.fs-sidebar-item-module-link.fs-sidebar-item-module-active,
+body:has(.fs-album-artist-detail-content-module-content-container) .fs-sidebar-item-module-link[href='#/library/album-artists'] {
+  color: rgb(109, 245, 157) !important;
+  background: linear-gradient(90deg, rgba(30, 215, 96, 0.19), rgba(30, 215, 96, 0.035)) !important;
+  box-shadow: inset 3px 0 var(--snow-accent);
+}
+
+.fs-sidebar-item-module-link:hover {
+  color: rgb(222, 255, 233);
+  background: rgba(30, 215, 96, 0.09) !important;
+}
+
+.fs-context-menu-module-content,
+.fs-dropdown-menu-module-menu-dropdown,
+.fs-select-module-dropdown,
+.fs-popover-module-dropdown {
+  background: rgba(10, 19, 15, 0.96) !important;
+  border: 1px solid rgba(30, 215, 96, 0.20) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(24px);
+}
+
+.mantine-Menu-item[data-hovered],
+.mantine-Menu-item:hover,
+.mantine-Select-option[data-combobox-selected],
+[cmdk-item][data-selected='true'] {
+  color: rgb(193, 255, 214) !important;
+  background: rgba(30, 215, 96, 0.14) !important;
+}
+
+.fs-player-bar-module-container {
+  background: rgba(7, 13, 10, 0.90) !important;
+  border-top: 1px solid rgba(30, 215, 96, 0.18);
+  backdrop-filter: blur(24px);
+}
+
+.fs-poster-card-module-image-container {
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  transition: box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.fs-poster-card-module-image-container:hover {
+  border-color: rgba(30, 215, 96, 0.45);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+.mantine-Tabs-tab[data-active] {
+  color: rgb(109, 245, 157);
+  border-color: var(--snow-accent);
+}
+
+.fs-library-background-overlay-module-background-image {
+  min-height: clamp(320px, 43vh, 560px);
+  background-position: center 32% !important;
+}
+
+.fs-library-background-overlay-module-background-image-overlay {
+  min-height: clamp(440px, 60vh, 720px);
+  background: linear-gradient(180deg, rgba(2, 6, 4, 0.25), rgba(2, 6, 4, 0.65) 55%, rgb(2, 2, 3) 100%) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fs-sidebar-item-module-link,
+  .fs-poster-card-module-image-container { transition: none; }
+}

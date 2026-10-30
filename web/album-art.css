@@ -1,0 +1,50 @@
+.snow-album-art-button {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 5;
+  padding: 8px 12px;
+  color: #f3fff7;
+  font: 600 12px/1.2 system-ui, sans-serif;
+  cursor: pointer;
+  background: rgba(4, 13, 8, 0.82);
+  border: 1px solid rgba(109, 245, 157, 0.4);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+}
+.snow-album-art-button:hover { background: rgba(20, 75, 40, 0.92); }
+.snow-album-art-button:focus-visible { outline: 2px solid #1ed760; outline-offset: 3px; }
+.snow-album-art-viewer {
+  width: min(1024px, 96vw);
+  max-width: 96vw;
+  max-height: 96dvh;
+  padding: 0;
+  overflow: auto;
+  color: #f3fff7;
+  background: #080d0a;
+  border: 1px solid rgba(30, 215, 96, 0.35);
+  border-radius: 16px;
+}
+.snow-album-art-viewer::backdrop { background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(10px); }
+.snow-album-art-panel { padding: 12px; }
+.snow-album-art-header { display: flex; gap: 16px; align-items: center; justify-content: space-between; padding: 0 0 12px; }
+.snow-album-art-header strong { font: 600 14px/1.4 system-ui, sans-serif; }
+.snow-album-art-header button {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  color: #f3fff7;
+  font: 600 13px system-ui, sans-serif;
+  cursor: pointer;
+  background: #153723;
+  border: 1px solid #287346;
+  border-radius: 16px;
+}
+.snow-full-album-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(94dvh - 80px);
+  object-fit: contain;
+  border-radius: 6px;
+}
+.snow-full-album-cover[hidden] { display: none; }

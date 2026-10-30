@@ -1,0 +1,160 @@
+/* Snow Music / Crimson. Specificity keeps overrides stable after Feishin sanitizing. */
+:root:root {
+  --snow-accent: rgb(255, 66, 87);
+  --theme-colors-background: rgb(9, 8, 11) !important;
+  --theme-colors-background-alternate: rgb(14, 12, 16) !important;
+  --theme-colors-background-transparent: 9, 8, 11 !important;
+  --theme-colors-surface: rgb(24, 20, 26) !important;
+  --theme-colors-foreground: rgb(248, 244, 246) !important;
+  --theme-colors-foreground-muted: rgb(173, 163, 174) !important;
+  --theme-colors-border: rgba(255, 255, 255, 0.09) !important;
+  --theme-colors-primary: rgb(255, 78, 98) !important;
+  --theme-colors-primary-filled: rgb(237, 48, 72) !important;
+  --theme-colors-primary-contrast: rgb(255, 255, 255) !important;
+  --theme-colors-primary-light: rgba(237, 48, 72, 0.15) !important;
+  --theme-colors-primary-light-hover: rgba(237, 48, 72, 0.23) !important;
+  --theme-scrollbar-handle-background: rgba(255, 255, 255, 0.16) !important;
+  --theme-scrollbar-handle-hover-background: rgba(255, 78, 98, 0.48) !important;
+}
+html body {
+  background: radial-gradient(ellipse at 86% 0%, rgba(100, 12, 30, 0.17), transparent 52%), rgb(9, 8, 11) !important;
+  background-attachment: fixed !important;
+}
+body #root, body #default-layout, body #mobile-layout, body #main-content,
+body .fs-main-content-module-main-content-container, body .fs-mobile-layout-module-main-content { background: transparent !important; }
+body #sidebar, body #sidebar-queue, body .fs-left-sidebar-module-container,
+body .fs-right-sidebar-module-right-sidebar-container, body .fs-mobile-sidebar-module-container,
+body .fs-side-drawer-queue-module-queue-drawer {
+  background: linear-gradient(160deg, rgba(23, 16, 23, 0.74), rgba(10, 9, 13, 0.78)) !important;
+  border-color: rgba(255, 255, 255, 0.075) !important;
+  backdrop-filter: blur(24px) saturate(1.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+body .fs-mobile-sidebar-module-accordion-content, body .fs-sidebar-module-accordion-content { background: rgba(4, 4, 7, 0.18) !important; }
+body .fs-window-bar-module-container, body .fs-page-header-module-container {
+  background: rgba(10, 8, 12, 0.66) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(22px);
+}
+body .fs-sidebar-item-module-link { border-radius: 10px !important; min-height: 40px; }
+body .fs-sidebar-item-module-link.fs-sidebar-item-module-active,
+html body:has(.fs-album-artist-detail-content-module-content-container) .fs-sidebar-item-module-link[href='#/library/album-artists'] {
+  color: rgb(255, 222, 227) !important;
+  background: linear-gradient(100deg, rgba(222, 35, 65, 0.25), rgba(222, 35, 65, 0.04)) !important;
+  box-shadow: inset 3px 0 rgb(255, 66, 87), inset 0 0 0 1px rgba(255, 106, 127, 0.10);
+}
+body .fs-sidebar-item-module-link:hover { color: rgb(255, 245, 247); background: rgba(255, 255, 255, 0.055) !important; }
+body .fs-context-menu-module-content, body .fs-dropdown-menu-module-menu-dropdown,
+body .fs-select-module-dropdown, body .fs-popover-module-dropdown, body .fs-modal-module-content,
+body .fs-dialog-module-root, body .mantine-Drawer-content {
+  background: linear-gradient(145deg, rgba(29, 19, 27, 0.95), rgba(13, 11, 16, 0.95)) !important;
+  border: 1px solid rgba(255, 181, 193, 0.14) !important;
+  border-radius: 18px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(28px);
+}
+body .fs-modal-module-header, body .mantine-Drawer-header, body .mantine-Drawer-body { background: transparent !important; }
+body .mantine-Menu-item[data-hovered], body .mantine-Menu-item:hover,
+body .mantine-Select-option[data-combobox-selected], body [cmdk-item][data-selected='true'] {
+  color: rgb(255, 232, 237) !important;
+  background: rgba(237, 48, 72, 0.17) !important;
+}
+body #player-bar, body .fs-player-bar-module-container {
+  background: linear-gradient(105deg, rgba(29, 14, 23, 0.86), rgba(13, 11, 16, 0.85) 55%, rgba(24, 13, 21, 0.86)) !important;
+  border-top: 1px solid rgba(255, 117, 136, 0.18);
+  box-shadow: 0 -14px 36px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(28px) saturate(1.1);
+}
+body .fs-mobile-layout-module-drawer-button { background: rgba(28, 18, 26, 0.8) !important; border: 1px solid rgba(255, 105, 125, 0.25) !important; backdrop-filter: blur(20px); }
+body .fs-poster-card-module-image-container {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+body .fs-poster-card-module-image-container:hover { border-color: rgba(255, 116, 138, 0.5); box-shadow: 0 15px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(219, 24, 61, 0.13); transform: translateY(-3px); }
+body .fs-poster-card-module-image { border-radius: 13px !important; }
+body .fs-left-controls-module-image, body .fs-mobile-playerbar-module-image { border-radius: 10px !important; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28); }
+body .ag-root-wrapper, body .ag-header, body .mantine-Table-th { background: rgba(15, 12, 17, 0.38) !important; border-color: rgba(255, 255, 255, 0.07) !important; }
+body .ag-row { background: rgba(9, 8, 11, 0.25) !important; }
+body .ag-row.ag-row-hover { background: rgba(255, 255, 255, 0.055) !important; }
+body .ag-row.ag-row-selected { background: rgba(237, 48, 72, 0.14) !important; }
+body .mantine-Tabs-tab[data-active] { color: rgb(255, 189, 201); border-color: rgb(255, 66, 87); }
+body .fs-text-input-module-input, body .fs-select-module-input { background: rgba(22, 17, 25, 0.82) !important; border: 1px solid rgba(255, 255, 255, 0.07); }
+body :is(button, a, input):focus-visible { outline: 2px solid rgb(255, 118, 138); outline-offset: 3px; }
+
+/* Replace the random movie/album hero with a consistent geometric title. */
+body .fs-feature-carousel-module-single-carousel-container {
+  position: relative;
+  height: clamp(245px, 24vw, 320px);
+  margin-bottom: 4px;
+  border: 1px solid rgba(255, 139, 160, 0.12);
+  border-radius: 24px;
+  background: var(--snow-crystal-hero-image) center / cover no-repeat, linear-gradient(115deg, rgba(47, 15, 27, 0.72), rgba(10, 8, 12, 0.50));
+  box-shadow: inset 0 1px 0 rgba(255, 216, 226, 0.04), 0 18px 42px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+body .fs-feature-carousel-module-single-carousel-container > * { display: none !important; }
+body .fs-feature-carousel-module-single-carousel-container::before {
+  content: 'All your music.\A All yours.';
+  position: absolute;
+  top: 72px;
+  left: 36px;
+  z-index: 1;
+  color: rgb(255, 246, 248);
+  white-space: pre-line;
+  font-size: clamp(38px, 3.5vw, 62px);
+  font-weight: 850;
+  line-height: 1.03;
+  letter-spacing: -0.065em;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+body .fs-feature-carousel-module-single-carousel-container::after {
+  content: 'SNOW MUSIC / YOUR COLLECTION';
+  position: absolute;
+  top: 35px;
+  left: 38px;
+  color: rgb(255, 144, 164);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.19em;
+  pointer-events: none;
+}
+body .fs-library-background-overlay-module-background-image-overlay { background: linear-gradient(180deg, rgba(9, 8, 11, 0.12), rgba(9, 8, 11, 0.56) 55%, rgb(9, 8, 11) 100%) !important; }
+body .fs-full-screen-player-module-background-image-overlay,
+body .fs-mobile-fullscreen-player-module-background-image-overlay { background: linear-gradient(115deg, rgba(33, 5, 15, 0.18), transparent 60%), linear-gradient(180deg, rgba(7, 6, 9, 0.18), rgba(7, 6, 9, 0.30) 48%, rgba(7, 6, 9, 0.87)) !important; }
+body .fs-full-screen-player-image-module-image, body .fs-mobile-fullscreen-player-module-image { border-radius: 20px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.1); }
+body .fs-mobile-fullscreen-player-module-title-row { justify-content: flex-start; }
+body .fs-mobile-fullscreen-player-module-metadata-container { align-items: flex-start; padding: 16px 24px 20px; }
+body .fs-mobile-fullscreen-player-module-metadata-row { justify-content: flex-start; }
+body .fs-mobile-fullscreen-player-module-bottom-controls-bar { border-color: rgba(255, 255, 255, 0.10); background: rgba(10, 8, 12, 0.35); padding-bottom: env(safe-area-inset-bottom); }
+body .snow-album-art-viewer { background: rgba(18, 11, 19, 0.93); border-color: rgba(255, 121, 148, 0.22); backdrop-filter: blur(28px); }
+body .fs-mobile-fullscreen-player-module-lyrics-state {
+  background: rgba(9, 5, 12, 0.76) !important;
+  backdrop-filter: blur(18px);
+}
+body .fs-mobile-fullscreen-player-module-metadata-container .fs-shared-full-screen-player-metadata-module-metadata-container {
+  width: 100%; max-width: 100%; gap: 6px;
+  align-items: flex-start !important; text-align: left !important;
+}
+body .fs-mobile-fullscreen-player-module-metadata-container .fs-shared-full-screen-player-metadata-module-metadata-container > :first-child {
+  font-size: clamp(24px, 6.4vw, 30px) !important;
+  line-height: 1.15 !important; letter-spacing: -0.04em;
+}
+body .fs-mobile-fullscreen-player-module-metadata-container .fs-shared-full-screen-player-metadata-module-metadata-container > :nth-child(2) { font-size: 16px; color: rgb(231, 211, 220); }
+body .fs-mobile-fullscreen-player-module-metadata-container .fs-shared-full-screen-player-metadata-module-metadata-container > :nth-child(3) { font-size: 13px; color: rgb(183, 166, 180); }
+@media (max-width: 768px) {
+  html body .fs-feature-carousel-module-single-carousel-container { height: 218px; border-radius: 20px; background-position: 57% center; }
+  html body .fs-feature-carousel-module-single-carousel-container::before { top: 72px; left: 22px; font-size: clamp(33px, 8.6vw, 46px); }
+  html body .fs-feature-carousel-module-single-carousel-container::after { top: 31px; left: 24px; font-size: 9px; max-width: 150px; line-height: 1.7; }
+  html body .fs-mobile-fullscreen-player-module-header { padding-top: max(12px, env(safe-area-inset-top)); }
+  html body .fs-mobile-fullscreen-player-module-image-container { padding: 12px 24px; }
+  html body .fs-mobile-fullscreen-player-module-image { max-width: min(100%, 42dvh) !important; }
+  html body .fs-mobile-fullscreen-player-module-progress-container { padding: 0 24px 22px; }
+  html body .fs-mobile-fullscreen-player-module-controls-container { gap: 22px; padding-bottom: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .fs-poster-card-module-image-container { transition: none; }
+  html body .fs-poster-card-module-image-container:hover { transform: none; }
+}

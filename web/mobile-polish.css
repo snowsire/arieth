@@ -1,0 +1,275 @@
+/* Web-only mobile chrome. The class is added only to a signed-in mobile app. */
+#snow-mobile-nav { display: none; }
+#snow-mobile-nav[hidden] { display: none !important; }
+
+@media (max-width: 768px) {
+  body.snow-mobile-ready {
+    --snow-nav-height: 68px;
+    --snow-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --snow-dock-space: calc(152px + var(--snow-safe-bottom));
+  }
+
+  body.snow-mobile-ready #mobile-layout {
+    height: 100dvh !important;
+    grid-template-rows: 0 minmax(0, 1fr) var(--snow-dock-space) !important;
+  }
+
+  body.snow-mobile-ready .fs-mobile-layout-module-main-content {
+    min-height: 0;
+    padding-bottom: 8px;
+    scroll-padding-bottom: 20px;
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 120;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    height: calc(var(--snow-nav-height) + var(--snow-safe-bottom));
+    padding: 5px max(10px, env(safe-area-inset-left, 0px)) var(--snow-safe-bottom) max(10px, env(safe-area-inset-right, 0px));
+    box-sizing: border-box;
+    background: linear-gradient(180deg, rgba(13, 10, 13, 0.88), rgba(8, 8, 11, 0.98));
+    border-top: 1px solid rgba(255, 95, 112, 0.11);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(24px) saturate(1.15);
+    -webkit-backdrop-filter: blur(24px) saturate(1.15);
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav a,
+  body.snow-mobile-ready #snow-mobile-nav button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 44px;
+    min-height: 54px;
+    margin: 0 3px;
+    padding: 5px 4px;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.015em;
+    color: #a6a0a7;
+    text-decoration: none;
+    border: 0;
+    border-radius: 15px;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
+    transition: color 140ms ease, background 140ms ease;
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav svg { flex: 0 0 auto; }
+
+  body.snow-mobile-ready #snow-mobile-nav [aria-current='page'] {
+    color: #fff1f3;
+    background: linear-gradient(180deg, rgba(214, 31, 63, 0.18), rgba(214, 31, 63, 0.02));
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav [aria-current='page'] svg {
+    color: #ff6178;
+    filter: drop-shadow(0 0 7px rgba(255, 41, 77, 0.25));
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav [aria-current='page']::before {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 9px);
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #ff4767;
+    content: '';
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav :is(a, button):active {
+    background: rgba(255, 77, 104, 0.14);
+  }
+
+  body.snow-mobile-ready #snow-mobile-nav :is(a, button):focus-visible {
+    outline: 2px solid #ff738a;
+    outline-offset: -3px;
+  }
+
+  /* Reuse the real player controls and their current-song state. */
+  body.snow-mobile-ready #mobile-layout #player-bar {
+    position: fixed;
+    right: max(9px, env(safe-area-inset-right, 0px));
+    bottom: calc(var(--snow-nav-height) + var(--snow-safe-bottom) + 7px);
+    left: max(9px, env(safe-area-inset-left, 0px));
+    z-index: 140;
+    height: 70px;
+    width: auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 111, 129, 0.22) !important;
+    border-radius: 17px !important;
+    background: linear-gradient(110deg, rgba(66, 24, 34, 0.86), rgba(19, 17, 23, 0.95) 72%) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+    backdrop-filter: blur(28px) saturate(1.2);
+    -webkit-backdrop-filter: blur(28px) saturate(1.2);
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-container {
+    height: 68px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px !important;
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-metadata-stack {
+    max-width: 100%;
+    gap: 3px;
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-controls-wrapper { gap: 3px; }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-controls-wrapper > button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-controls-wrapper > button:first-child,
+  body.snow-mobile-ready .fs-mobile-playerbar-module-container .song-album,
+  body.snow-mobile-ready .fs-mobile-layout-module-drawer-button {
+    display: none !important;
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-container .song-title {
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  body.snow-mobile-ready .fs-mobile-playerbar-module-container .song-artist {
+    color: #bbb2ba;
+    font-size: 11px;
+  }
+
+  body.snow-mobile-ready:has(.fs-mobile-layout-module-full-screen-player-overlay) #player-bar {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* A real search field has room to breathe on a phone. */
+  body.snow-mobile-ready .fs-page-header-module-container input {
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  /* SearchInput is normally a 36px collapsed button; expose its native field. */
+  body.snow-mobile-ready.snow-mobile-search .snow-search-header {
+    flex-shrink: 0;
+    height: 132px !important;
+    overflow: visible;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-search-header .fs-page-header-module-title-wrapper {
+    padding: 14px 16px 12px;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-search-heading {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    min-width: 0;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-search-heading .fs-library-header-bar-module-header-container {
+    min-height: 34px;
+    padding: 0;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-search-field-slot,
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search,
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search > .fs-text-input-module-root {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    opacity: 1 !important;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search {
+    overflow: visible !important;
+    transition: none !important;
+  }
+
+  /* Only the Box's direct overlay button; the input's nested Clear stays live. */
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search > button {
+    display: none !important;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search input {
+    height: 46px;
+    min-height: 46px;
+    width: 100%;
+    border: 1px solid rgba(255, 125, 144, 0.24) !important;
+    border-radius: 14px !important;
+    color: #fff3f5;
+    background: rgba(255, 240, 244, 0.055) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+    font-size: 16px;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search input::placeholder {
+    color: #b4a7b0;
+    opacity: 1;
+  }
+
+  body.snow-mobile-ready.snow-mobile-search .snow-native-search input:focus {
+    border-color: rgba(255, 107, 133, 0.68) !important;
+    box-shadow: 0 0 0 3px rgba(232, 40, 79, 0.10);
+  }
+
+  /* Native fullscreen actions, with discoverable captions and real handlers. */
+  body.snow-mobile-ready .fs-mobile-fullscreen-player-module-bottom-controls-group {
+    height: 64px;
+    min-height: 64px;
+  }
+
+  body.snow-mobile-ready .fs-mobile-fullscreen-player-module-bottom-controls-group button[data-snow-control-label] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 64px;
+    min-height: 64px;
+    min-width: 44px;
+    padding: 6px 2px !important;
+    border-radius: 10px;
+    touch-action: manipulation;
+  }
+
+  body.snow-mobile-ready .fs-mobile-fullscreen-player-module-bottom-controls-group button[data-snow-control-label] .mantine-ActionIcon-icon {
+    flex: 0 0 auto;
+    height: 24px;
+  }
+
+  body.snow-mobile-ready .fs-mobile-fullscreen-player-module-bottom-controls-group button[data-snow-control-label]::after {
+    content: attr(data-snow-control-label);
+    display: block;
+    flex: 0 0 auto;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.02em;
+    color: #d2c8ce;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.snow-mobile-ready #snow-mobile-nav a,
+  body.snow-mobile-ready #snow-mobile-nav button { transition: none; }
+}
