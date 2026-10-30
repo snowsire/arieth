@@ -171,6 +171,8 @@ class SetupTests(unittest.TestCase):
             setup.customize(web)
             self.assertEqual((web / 'index.html').read_text(encoding='utf-8'), before)
             self.assertEqual(before.count('mobile-polish.js'), 1)
+            self.assertEqual(before.count('home-discovery.js'), 1)
+            self.assertEqual(before.count('home-discovery.css'), 1)
             self.assertIn('Arieth - Snow Music', before)
             manifest = json.loads((web / 'manifest.webmanifest').read_text(encoding='utf-8'))
             self.assertEqual(manifest['scope'], '/')

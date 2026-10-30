@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 root = Path(__file__).resolve().parent
-theme_files = ['snow-music.css', 'crimson.css', 'polygon-atmosphere.css', 'live-lyrics.css']
+theme_files = ['snow-music.css', 'crimson.css', 'polygon-atmosphere.css', 'live-lyrics.css', 'home-discovery.css']
 settings = {
     'SERVER_NAME': 'Snow Music', 'SERVER_TYPE': 'navidrome', 'SERVER_LOCK': 'true',
     'REMOTE_URL': '', 'LEGACY_AUTHENTICATION': 'false', 'ANALYTICS_DISABLED': 'true',
@@ -59,6 +59,32 @@ lines.append(r'''
     localStorage.setItem('store_full_screen_player',JSON.stringify(player));
     localStorage.setItem('snow_theme_revision','crimson-5');
   } catch (error) { console.warn('Snow Music theme preferences could not be saved.'); }
+})();
+
+// Home has its own revision so this update preserves playback and lyric choices.
+(() => {
+  try {
+    if (localStorage.getItem('snow_home_revision') === 'discovery-1') return;
+    const settings = JSON.parse(localStorage.getItem('store_settings') || '{"state":{},"version":34}');
+    settings.state ??= {};
+    settings.state.general ??= {};
+    const order = ['playlists','genres','recentlyPlayed','random','mostPlayed','recentlyAdded','recentlyReleased'];
+    const old = settings.state.general.homeItems || [];
+    settings.state.general.homeItems = order.map(id => ({
+      ...old.find(item => item.id === id), id,
+      disabled: id === 'recentlyAdded' || id === 'recentlyReleased',
+    })).concat(old.filter(item => !order.includes(item.id)));
+    settings.state.general.homeFeature = true;
+    settings.state.general.homeFeatureStyle = 'single';
+    settings.state.css = {...settings.state.css, enabled:true, content:window.FS_CSS_CONTENT};
+    localStorage.setItem('store_settings', JSON.stringify(settings));
+    const app = JSON.parse(localStorage.getItem('store_app') || 'null');
+    if (app?.state?.sidebar) {
+      app.state.sidebar.leftWidth = '280px';
+      localStorage.setItem('store_app', JSON.stringify(app));
+    }
+    localStorage.setItem('snow_home_revision', 'discovery-1');
+  } catch { console.warn('Snow Music Home preferences could not be saved.'); }
 })();
 ''')
 target = root/'web'/'settings.js'

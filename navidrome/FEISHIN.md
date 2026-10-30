@@ -27,13 +27,16 @@ On Windows, an elevated PowerShell can optionally run `./install-phone-task.ps1`
 
 ## Customize
 
-- `snow-music.css`, `crimson.css`, `polygon-atmosphere.css`, and `live-lyrics.css` form the current web theme, in that order.
+- `snow-music.css`, `crimson.css`, `polygon-atmosphere.css`, `live-lyrics.css`, and `home-discovery.css` form the current web theme, in that order.
 - `polygon-atmosphere.py` regenerates the geometric SVG backgrounds without external assets.
 - `prepare-phone-settings.py` defines web defaults and a versioned, one-time presentation migration. Existing authentication and unrelated preferences are preserved.
 - `web/mobile-polish.*`, `web/artist-backdrop.*`, and `web/album-art.*` extend the official web UI without editing its compiled bundles. Album art remains the fallback when no artist photo is available.
+- `web/home-discovery.js` adds a Daily Mix shortcut, taste-based genre links, and discovery labels. Genre discovery uses the existing same-origin Navidrome session and keeps native genre links when unavailable. `home-discovery.css` supplies the responsive layout and colorful genre cards; setup copies it into the web assets.
 - `dark-glass.css` retains the alternative glass theme. Desktop Feishin can use the CSS through its supported custom stylesheet setting; this repository does not replace the desktop executable.
 
 Run `python setup-web.py` after changes to theme files. The current settings migration is `crimson-5`; increase the revision when changing migration behavior so existing browsers receive it once. Keep native Feishin lyric timestamps and word cues intact. Line-only lyrics remain line-synchronized.
+
+Home preferences have a separate migration, `discovery-1`, which places playlists and genres first and disables both newly added and recently released shelves without resetting playback or lyric choices. On desktop Feishin, use Settings > General > Home configuration to use that same order and turn off those two shelves. The combined CSS can be applied through the supported custom stylesheet setting; the native desktop Home uses its own playlist shelf instead of the web-only banner.
 
 ## Verify
 

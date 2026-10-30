@@ -25,8 +25,9 @@ test('fresh browser gets a complete home order and visible song metadata', () =>
   const app = browser();
   app.run();
   const state = app.read('store_settings').state;
-  assert.equal(state.general.homeItems[0].id, 'recentlyPlayed');
+  assert.equal(state.general.homeItems[0].id, 'playlists');
   assert.equal(state.general.homeItems.length, 7);
+  assert.deepEqual(state.general.homeItems.filter(item => item.disabled).map(item => item.id), ['recentlyAdded', 'recentlyReleased']);
   assert.deepEqual(state.general.playerItems.map(item => item.id), ['title', 'artist', 'album']);
   assert.ok(state.general.playerItems.every(item => !item.disabled));
   assert.equal(state.lyrics.lineLeadTimeMs, 250);
@@ -49,7 +50,7 @@ test('migration preserves unrelated preferences and orders unknown sections last
   const state = app.read('store_settings').state;
   assert.equal(state.playback.volume, 23);
   assert.equal(state.lyrics.translation, 'existing');
-  assert.deepEqual(state.general.homeItems.map(item => item.id), ['recentlyPlayed', 'genres', 'future']);
+  assert.deepEqual(state.general.homeItems.map(item => item.id), ['playlists', 'genres', 'recentlyPlayed', 'random', 'mostPlayed', 'recentlyAdded', 'recentlyReleased', 'future']);
   assert.equal(state.general.playerItems.find(item => item.id === 'codec').disabled, true);
   assert.equal(state.general.playerItems.find(item => item.id === 'title').disabled, false);
   assert.equal(app.values.get('store_authentication'), 'do not modify authentication');
@@ -67,4 +68,23 @@ test('missing state is repaired and corrupt storage is left intact', () => {
   assert.doesNotThrow(corrupt.run);
   assert.equal(corrupt.values.get('store_settings'), '{broken');
   assert.equal(corrupt.values.has('snow_theme_revision'), false);
+});
+
+test('existing theme gets discovery Home without resetting playback or lyric choices', () => {
+  const app = browser({
+    snow_theme_revision: 'crimson-5',
+    store_settings: JSON.stringify({version:34,state:{
+      general:{accent:'my color',homeItems:[{id:'recentlyAdded',disabled:false},{id:'recentlyReleased',disabled:false}]},
+      playback:{volume:17}, lyrics:{follow:false,delayMs:300},
+    }}),
+  });
+  app.run();
+  const state = app.read('store_settings').state;
+  assert.equal(state.general.accent, 'my color');
+  assert.equal(state.playback.volume, 17);
+  assert.equal(state.lyrics.follow, false);
+  assert.equal(state.lyrics.delayMs, 300);
+  assert.ok(state.general.homeItems.filter(item => ['recentlyAdded','recentlyReleased'].includes(item.id)).every(item => item.disabled));
+  assert.equal(app.values.get('snow_home_revision'), 'discovery-1');
+  assert.ok(state.css.content.includes('snow-discovery-hero'));
 });

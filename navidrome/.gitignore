@@ -17,6 +17,7 @@
 !/crimson.css
 !/polygon-atmosphere.css
 !/live-lyrics.css
+!/home-discovery.css
 !/web-manifest.json
 !/tests/
 !/web/
@@ -27,3 +28,4 @@
 !/web/album-art.css
 !/web/mobile-polish.js
 !/web/mobile-polish.css
+!/web/home-discovery.js
