@@ -1,0 +1,6 @@
+# Track maintained tools only. Credentials and generated library data stay local.
+/*
+!/.gitignore
+!/README.md
+!/playlist-library-audit.py
+!/create-flac-mixes.py

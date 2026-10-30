@@ -4,6 +4,8 @@ Arieth customizes [Feishin 1.17.0](https://github.com/jeffvli/feishin/tree/v1.17
 
 This repository contains the maintained customization sources and local web proxy. Official Feishin bundles are downloaded during setup, verified against the pinned OCI manifest and layer SHA-256 digests, and kept out of Git. The upstream reference archive, music library, credentials, browser profiles, screenshots, reports, and executables are also excluded.
 
+Navidrome manages the library and shared server playlists; Feishin and Symfonium are clients. The [navidrome/](navidrome/README.md) directory contains the library audit and FLAC playlist tools. The theme and phone-player customizations below belong to Feishin.
+
 ## Run the web player
 
 Requires Python 3.9 or newer and Navidrome listening on `127.0.0.1:4533`.

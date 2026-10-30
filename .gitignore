@@ -8,6 +8,7 @@
 !/.github/
 !/tests/
 !/web/
+!/navidrome/
 !/phone-server.py
 !/extract-web.py
 !/setup-web.py

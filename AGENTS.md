@@ -1,6 +1,7 @@
 # Arieth
 
-This repository maintains the overlays and local proxy for Feishin 1.17.0.
+This repository maintains the overlays and local proxy for Feishin 1.17.0,
+plus Navidrome playlist tools under `navidrome/`.
 The `source/` directory, when present, is an ignored upstream reference archive.
 Do not commit credentials, browser profiles, logs, library reports, screenshots,
 installed executables, or generated web bundles/settings.
