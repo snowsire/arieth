@@ -1,6 +1,8 @@
 # Navidrome
 
-Navidrome owns the music library and server playlists. Feishin and Symfonium connect to the same server account to access them. Feishin's theme and phone-player sources remain at the repository root.
+This directory contains the complete music project: Navidrome playlist tools, Feishin themes and web overlays, the phone-player proxy, setup scripts, and tests. Navidrome owns the music library and server playlists; Feishin and Symfonium are clients.
+
+See [FEISHIN.md](FEISHIN.md) for the player setup, theme customization, and verification commands. All paths in that guide are relative to this directory after `cd navidrome`.
 
 ## Tools
 
