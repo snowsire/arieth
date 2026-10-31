@@ -11,16 +11,17 @@
     'Genres': 'Find your frequency',
   };
   const palette = [
-    [/emo|screamo|post.hardcore/i, '#b46cff'],
-    [/punk/i, '#ff639b'],
-    [/rock|grunge|metal/i, '#ff795b'],
-    [/dubstep|drum|bass/i, '#31cecb'],
-    [/dance|house|trance|electro/i, '#688bff'],
-    [/indie|alternative/i, '#c279f4'],
-    [/jazz|soul|blues/i, '#e9ad53'],
-    [/hip.hop|rap|funk/i, '#61c897'],
-    [/pop/i, '#f277be'],
-    [/ambient|classical|instrumental/i, '#70b6c4'],
+    [/emo|screamo|post.hardcore/i, '#b46cff', 'orbits'],
+    [/punk/i, '#ff639b', 'checker'],
+    [/rock|grunge|metal/i, '#ff795b', 'rays'],
+    [/dubstep/i, '#31cecb', 'wave'],
+    [/drum|bass/i, '#31cecb', 'equalizer'],
+    [/dance|house|trance|electro/i, '#688bff', 'grooves'],
+    [/indie|alternative/i, '#c279f4', 'orbits'],
+    [/jazz|soul|blues/i, '#e9ad53', 'grooves'],
+    [/hip.hop|rap|funk/i, '#61c897', 'equalizer'],
+    [/pop/i, '#f277be', 'checker'],
+    [/ambient|classical|instrumental/i, '#70b6c4', 'orbits'],
   ];
   let timer;
   let genreState = {key:'', items:null};
@@ -68,6 +69,7 @@
       const tile = document.createElement('a');
       tile.href = '#/library/genres/' + encodeURIComponent(genre.id);
       tile.className = 'snow-genre-tile';
+      tile.dataset.snowGenreArt = palette.find(([pattern]) => pattern.test(genre.name))?.[2] || 'orbits';
       tile.style.setProperty('--snow-genre-color', color);
       tile.style.setProperty('--snow-genre-rgb', color.slice(1).match(/../g).map(part => parseInt(part,16)).join(','));
       const kicker = document.createElement('span');
@@ -108,7 +110,8 @@
     for (const node of document.querySelectorAll('.fs-featured-genres-module-genre-container, .fs-item-card-module-genre-placeholder')) {
       const name = node.querySelector('.fs-featured-genres-module-genre-name, .fs-item-card-module-genre-placeholder-text')?.textContent.trim();
       if (!name || node.dataset.snowGenre === name) continue;
-      const color = palette.find(([pattern]) => pattern.test(name))?.[1] || '#8b95e8';
+      const [, color, artwork] = palette.find(([pattern]) => pattern.test(name)) || [null, '#8b95e8', 'orbits'];
+      node.dataset.snowGenreArt = artwork;
       node.style.setProperty('--snow-genre-color', color);
       node.style.setProperty('--snow-genre-rgb', color.slice(1).match(/../g).map(part => parseInt(part,16)).join(','));
       if (node.matches('.fs-item-card-module-genre-placeholder')) {

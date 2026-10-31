@@ -29,6 +29,7 @@ On Windows, an elevated PowerShell can optionally run `./install-phone-task.ps1`
 
 - `snow-music.css`, `crimson.css`, `polygon-atmosphere.css`, `live-lyrics.css`, and `home-discovery.css` form the current web theme, in that order.
 - `polygon-atmosphere.py` regenerates the geometric SVG backgrounds without external assets.
+- `genre-art.py` regenerates six local SVG textures in `home-discovery.css`: strings and lightning, orbital rings, punk checks, record grooves, a waveform, and equalizer bars. Run `python genre-art.py --check` to verify the generated artwork is current.
 - `prepare-phone-settings.py` defines web defaults and a versioned, one-time presentation migration. Existing authentication and unrelated preferences are preserved.
 - `web/mobile-polish.*`, `web/artist-backdrop.*`, and `web/album-art.*` extend the official web UI without editing its compiled bundles. Album art remains the fallback when no artist photo is available.
 - `web/home-discovery.js` adds a Daily Mix shortcut, taste-based genre links, and discovery labels. Genre discovery uses the existing same-origin Navidrome session and keeps native genre links when unavailable. `home-discovery.css` supplies the responsive layout and colorful genre cards; setup copies it into the web assets.
