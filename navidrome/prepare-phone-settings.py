@@ -98,6 +98,22 @@ lines.append(r'''
     localStorage.setItem('snow_lyrics_revision', 'responsive-1');
   } catch { console.warn('Snow Music lyric responsiveness could not be saved.'); }
 })();
+
+(() => {
+  try {
+    if (localStorage.getItem('snow_lyrics_layout_revision') === 'compact-1') return;
+    const settings = JSON.parse(localStorage.getItem('store_settings') || '{"state":{},"version":34}');
+    settings.state ??= {};
+    const display = settings.state.lyricsDisplay || {};
+    settings.state.lyricsDisplay = {...display,
+      default:{...display.default,fontSize:28,fontSizeUnsync:22,gap:12,gapUnsync:10},
+      sidebar:{...display.sidebar,fontSize:20,fontSizeUnsync:18,gap:8,gapUnsync:8},
+    };
+    settings.state.css = {...settings.state.css,enabled:true,content:window.FS_CSS_CONTENT};
+    localStorage.setItem('store_settings',JSON.stringify(settings));
+    localStorage.setItem('snow_lyrics_layout_revision','compact-1');
+  } catch { console.warn('Snow Music compact lyrics could not be saved.'); }
+})();
 ''')
 target = root/'web'/'settings.js'
 temporary = target.with_suffix('.js.tmp')

@@ -4,12 +4,20 @@ body .fs-lyrics-module-lyrics-container {
   --snow-lyric-scarlet: rgb(255, 77, 96);
 }
 
+body .fs-lyrics-scroll-content-module-content:not(.fs-lyrics-scroll-content-module-preview) {
+  gap: 12px !important;
+}
+
+body #sidebar-queue .fs-lyrics-scroll-content-module-content:not(.fs-lyrics-scroll-content-module-preview) {
+  gap: 8px !important;
+}
+
 body .fs-lyric-line-module-lyric-line,
 body .fs-karaoke-lyric-line-module-karaoke-line {
   position: relative;
   padding: 0 1.25rem;
   font-weight: 750;
-  line-height: 1.3;
+  line-height: 1.2;
   letter-spacing: -0.035em;
   overflow-wrap: anywhere;
   text-wrap: pretty;
@@ -47,12 +55,12 @@ body .fs-karaoke-lyric-line-module-karaoke-line.synchronized:hover {
 
 body .fs-full-screen-player-module-container .fs-lyric-line-module-lyric-line,
 body .fs-full-screen-player-module-container .fs-karaoke-lyric-line-module-karaoke-line {
-  font-size: clamp(27px, 2.6vw, 44px) !important;
+  font-size: clamp(24px, 2.15vw, 36px) !important;
 }
 
 body .fs-lyric-line-module-lyric-line.unsynchronized {
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 1.4;
   letter-spacing: -0.018em;
 }
 
@@ -60,7 +68,7 @@ body .fs-lyric-line-module-romaji-line,
 body .fs-karaoke-lyric-line-module-overlay-line,
 body .fs-karaoke-lyric-line-module-translation-line {
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.3;
   letter-spacing: normal;
 }
 
@@ -87,11 +95,14 @@ body .fs-lyrics-actions-module-root {
 
 body #sidebar-queue .fs-lyric-line-module-lyric-line,
 body #sidebar-queue .fs-karaoke-lyric-line-module-karaoke-line {
-  font-size: 22px !important;
-  line-height: 1.35;
+  font-size: 20px !important;
+  line-height: 1.22;
 }
 
 @media (max-width: 768px) {
+  html body .fs-lyrics-scroll-content-module-content:not(.fs-lyrics-scroll-content-module-preview) {
+    gap: 10px !important;
+  }
   html body .fs-mobile-fullscreen-player-module-lyrics-content {
     padding: 0 14px 12px;
     overflow-y: hidden;
@@ -101,8 +112,8 @@ body #sidebar-queue .fs-karaoke-lyric-line-module-karaoke-line {
   html body .fs-mobile-fullscreen-player-module-container .fs-karaoke-lyric-line-module-karaoke-line,
   html body .fs-full-screen-player-module-container .fs-lyric-line-module-lyric-line,
   html body .fs-full-screen-player-module-container .fs-karaoke-lyric-line-module-karaoke-line {
-    font-size: clamp(24px, 6.8vw, 32px) !important;
-    line-height: 1.32;
+    font-size: clamp(21px, 5.8vw, 26px) !important;
+    line-height: 1.18;
     padding: 0 1rem;
     letter-spacing: -0.03em;
   }

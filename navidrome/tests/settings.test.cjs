@@ -112,3 +112,28 @@ test('responsive lyrics migrate once and preserve custom offsets and Home settin
   app.run();
   assert.equal(app.read('store_settings').state.lyrics.lineLeadTimeMs,450);
 });
+
+test('compact lyrics fit more lines while preserving timing and unrelated display choices', () => {
+  const app=browser({
+    snow_theme_revision:'crimson-5', snow_home_revision:'discovery-1', snow_lyrics_revision:'responsive-1',
+    store_settings:JSON.stringify({version:34,state:{
+      lyrics:{lineLeadTimeMs:650,delayMs:280,follow:true},
+      lyricsDisplay:{default:{fontSize:32,gap:28,opacityNonActive:0.4},sidebar:{gap:22,paddingLeft:3}},
+      general:{homeItems:[{id:'recentlyAdded',disabled:true}]},
+    }}),
+  });
+  app.run();
+  const state=app.read('store_settings').state;
+  assert.equal(state.lyricsDisplay.default.gap,12);
+  assert.equal(state.lyricsDisplay.default.fontSize,28);
+  assert.equal(state.lyricsDisplay.default.opacityNonActive,0.4);
+  assert.equal(state.lyricsDisplay.sidebar.gap,8);
+  assert.equal(state.lyricsDisplay.sidebar.paddingLeft,3);
+  assert.equal(state.lyrics.lineLeadTimeMs,650);
+  assert.equal(state.lyrics.delayMs,280);
+  assert.equal(state.general.homeItems[0].disabled,true);
+  state.lyricsDisplay.default.gap=16;
+  app.values.set('store_settings',JSON.stringify({version:34,state}));
+  app.run();
+  assert.equal(app.read('store_settings').state.lyricsDisplay.default.gap,16);
+});

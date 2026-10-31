@@ -41,6 +41,8 @@ Home preferences have a separate migration, `discovery-1`, which places playlist
 
 The `responsive-1` lyric migration sets line follow lead to 650 ms, up from 250 ms. `live-lyrics.css` shortens line opacity and scale transitions from 600 ms to 180 ms. This makes line changes and follow-scroll more responsive while preserving lyric timestamps, word timing, and custom offset settings. Desktop Feishin can use the same 650 ms line lead in its lyric settings.
 
+The `compact-1` layout migration reduces lyric gaps to 12 px (8 px in the sidebar), with slightly smaller display text. The shared stylesheet applies 10 px gaps and responsive 21-26 px text on phones, and caps desktop fullscreen text at 36 px. The animation engine measures the resulting layout, so lyric following and seeking keep working with the tighter spacing.
+
 ## Verify
 
 ```sh
