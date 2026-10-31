@@ -15,6 +15,7 @@ body .fs-karaoke-lyric-line-module-karaoke-line {
   text-wrap: pretty;
   color: var(--snow-lyric-ink);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.26);
+  transition-duration: 180ms, 180ms !important;
 }
 
 body .fs-lyric-line-module-lyric-line.lyrics-line-active,

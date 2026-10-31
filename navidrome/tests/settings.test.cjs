@@ -30,7 +30,7 @@ test('fresh browser gets a complete home order and visible song metadata', () =>
   assert.deepEqual(state.general.homeItems.filter(item => item.disabled).map(item => item.id), ['recentlyAdded', 'recentlyReleased']);
   assert.deepEqual(state.general.playerItems.map(item => item.id), ['title', 'artist', 'album']);
   assert.ok(state.general.playerItems.every(item => !item.disabled));
-  assert.equal(state.lyrics.lineLeadTimeMs, 250);
+  assert.equal(state.lyrics.lineLeadTimeMs, 650);
   assert.equal(state.lyrics.delayMs, 0);
   assert.equal(app.context.window.SERVER_URL, 'http://localhost:9180/navidrome');
   assert.equal(app.context.window.ANALYTICS_DISABLED, 'true');
@@ -87,4 +87,28 @@ test('existing theme gets discovery Home without resetting playback or lyric cho
   assert.ok(state.general.homeItems.filter(item => ['recentlyAdded','recentlyReleased'].includes(item.id)).every(item => item.disabled));
   assert.equal(app.values.get('snow_home_revision'), 'discovery-1');
   assert.ok(state.css.content.includes('snow-discovery-hero'));
+});
+
+test('responsive lyrics migrate once and preserve custom offsets and Home settings', () => {
+  const app = browser({
+    snow_theme_revision:'crimson-5', snow_home_revision:'discovery-1',
+    store_settings:JSON.stringify({version:34,state:{
+      general:{homeItems:[{id:'recentlyAdded',disabled:true}]},
+      lyrics:{lineLeadTimeMs:250,delayMs:320,follow:false,preferLocalLyrics:false},
+      playback:{volume:19},
+    }}),
+  });
+  app.run();
+  let state=app.read('store_settings').state;
+  assert.equal(state.lyrics.lineLeadTimeMs,650);
+  assert.equal(state.lyrics.delayMs,320);
+  assert.equal(state.lyrics.follow,false);
+  assert.equal(state.lyrics.preferLocalLyrics,false);
+  assert.equal(state.playback.volume,19);
+  assert.equal(state.general.homeItems[0].disabled,true);
+  assert.ok(state.css.content.includes('transition-duration: 180ms, 180ms'));
+  state.lyrics.lineLeadTimeMs=450;
+  app.values.set('store_settings',JSON.stringify({version:34,state}));
+  app.run();
+  assert.equal(app.read('store_settings').state.lyrics.lineLeadTimeMs,450);
 });

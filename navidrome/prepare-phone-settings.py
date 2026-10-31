@@ -15,7 +15,7 @@ settings = {
     'FS_PLAYBACK_TRANSCODE_ENABLED': 'true', 'FS_PLAYBACK_TRANSCODE_FORMAT': 'opus',
     'FS_PLAYBACK_TRANSCODE_BITRATE': '192', 'FS_LYRICS_FETCH': 'true',
     'FS_LYRICS_FOLLOW': 'true', 'FS_LYRICS_PREFER_LOCAL': 'true',
-    'FS_LYRICS_LINE_LEAD_TIME_MS': '250', 'FS_LYRICS_DELAY_MS': '0',
+    'FS_LYRICS_LINE_LEAD_TIME_MS': '650', 'FS_LYRICS_DELAY_MS': '0',
     'FS_LYRICS_FOLLOW_SCROLL_ALIGNMENT': '-8', 'FS_LYRICS_ALIGNMENT': 'left',
     'FS_CSS_ENABLED': 'true',
     'FS_CSS_CONTENT': '\n\n'.join((root/name).read_text(encoding='utf-8') for name in theme_files),
@@ -40,7 +40,7 @@ lines.append(r'''
     }
     theme.state.general.playerItems = items.map(item=>['title','artist','album'].includes(item.id)?{...item,disabled:false}:item);
     theme.state.lyrics = {...theme.state.lyrics,fetch:true,follow:true,preferLocalLyrics:true,
-      alignment:'left',delayMs:0,lineLeadTimeMs:250,followScrollAlignment:-8};
+      alignment:'left',delayMs:0,lineLeadTimeMs:650,followScrollAlignment:-8};
     theme.state.lyricsDisplay = {...theme.state.lyricsDisplay,
       default:{...theme.state.lyricsDisplay?.default,fontSize:32,fontSizeUnsync:24,gap:28,gapUnsync:18,
         opacityNonActive:0.38,scaleNonActive:0.96,paddingLeft:0,paddingRight:2},
@@ -85,6 +85,18 @@ lines.append(r'''
     }
     localStorage.setItem('snow_home_revision', 'discovery-1');
   } catch { console.warn('Snow Music Home preferences could not be saved.'); }
+})();
+
+(() => {
+  try {
+    if (localStorage.getItem('snow_lyrics_revision') === 'responsive-1') return;
+    const settings = JSON.parse(localStorage.getItem('store_settings') || '{"state":{},"version":34}');
+    settings.state ??= {};
+    settings.state.lyrics = {...settings.state.lyrics, lineLeadTimeMs:650};
+    settings.state.css = {...settings.state.css, enabled:true, content:window.FS_CSS_CONTENT};
+    localStorage.setItem('store_settings', JSON.stringify(settings));
+    localStorage.setItem('snow_lyrics_revision', 'responsive-1');
+  } catch { console.warn('Snow Music lyric responsiveness could not be saved.'); }
 })();
 ''')
 target = root/'web'/'settings.js'

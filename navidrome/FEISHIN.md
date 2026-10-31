@@ -39,6 +39,8 @@ Run `python setup-web.py` after changes to theme files. The current settings mig
 
 Home preferences have a separate migration, `discovery-1`, which places playlists and genres first and disables both newly added and recently released shelves without resetting playback or lyric choices. On desktop Feishin, use Settings > General > Home configuration to use that same order and turn off those two shelves. The combined CSS can be applied through the supported custom stylesheet setting; the native desktop Home uses its own playlist shelf instead of the web-only banner.
 
+The `responsive-1` lyric migration sets line follow lead to 650 ms, up from 250 ms. `live-lyrics.css` shortens line opacity and scale transitions from 600 ms to 180 ms. This makes line changes and follow-scroll more responsive while preserving lyric timestamps, word timing, and custom offset settings. Desktop Feishin can use the same 650 ms line lead in its lyric settings.
+
 ## Verify
 
 ```sh
