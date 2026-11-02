@@ -8,8 +8,34 @@ See [FEISHIN.md](FEISHIN.md) for the player setup, theme customization, and veri
 
 - `playlist-library-audit.py` reads the library through the OpenSubsonic API and writes a FLAC inventory and a summary. It does not change the server.
 - `create-flac-mixes.py` builds a local preview of five curated mixes from that inventory. `--create` creates the server playlists and verifies their track lists. A repeat run reuses matching playlists and refuses to overwrite an unrelated or changed playlist.
+- `smart-playlists.py` previews an upgrade of the five existing genre mixes and Your Daily Mix. `--apply` backs them up, updates their native Navidrome rules in place, and verifies the same track selection through Feishin and Symfonium API clients. It creates no additional playlists and leaves **shot yourself in the foot again** editable.
 
 The mixes are Rock - Classics & Anthems, Rock - Alternative & Grunge, Emo & Pop Punk - Sing It Loud, Emo - Post-Hardcore Nights, and Dance - After Dark. Each contains 40 FLAC tracks, interleaving artists, with no duplicate tracks across the five mixes. The scripts require the selected tracks to exist in your collection before publishing.
+
+That describes the initial hand-picked seed lists. The current server uses the smarter rules below; once upgraded, the original `create-flac-mixes.py --create` command intentionally refuses to overwrite these changed lists.
+
+## Smarter playlists
+
+The five genre mixes now choose 40 FLAC tracks from the wider catalogs of their original artist rosters. They exclude missing files, tracks shorter than 90 seconds or longer than 15 minutes, songs played in the last three days, and tracks/artists you rated 1–2 stars. Unrated music remains eligible. Selection is random within each pool, so deeper cuts can join the original anthems.
+
+Native rules select unique library entries; different editions of the same recording can still appear, and random selection does not enforce a fixed per-artist quota.
+
+Your Daily Mix uses those artist rosters directly, your editable playlist, loved tracks/albums/artists, highly rated songs, and artists you have played. It prefers loved tracks first, then higher track ratings, with random ties. Its tracks remain 2–10 minutes long and have the same three-day cooldown and low-rating exclusions. No favorites are required to get a full mix.
+
+Each mix stays stable for 24 hours after evaluation, then refreshes the next time a client accesses it. This is a rolling interval, not a midnight job. Navidrome evaluates the rules; the laptop does not need a scheduled task. Play counts and ratings belong to the playlist owner's account, so use that same account in all clients. Favorite a song to promote it in Daily Mix; rate unwanted tracks or artists 1–2 stars to exclude them at the next refresh. The current selection can remain cached until the daily interval expires. [Navidrome documents the refresh behavior and supported rules](https://www.navidrome.org/docs/usage/features/smart-playlists/).
+
+Smart playlists are edited through their rules in Feishin, rather than adding/reordering individual tracks. **shot yourself in the foot again** remains a regular playlist for manual additions. Playlist IDs, names, ownership, and visibility are preserved, and M3U auto-import stays disabled.
+
+From `arieth/navidrome`, using the same data-folder configuration as the other playlist tools:
+
+```powershell
+$env:NAVIDROME_DATA_DIR = 'C:\path\to\your\navidrome-data'
+python smart-playlists.py
+# Writes smart-playlist-plan.json locally; inspect before applying.
+python smart-playlists.py --apply
+```
+
+The tool requires the existing seven playlists and recognizes only the Arieth-managed mix comments. It reads the current library and stores native rule and track snapshots in `playlist-backups/smart-upgrade-<timestamp>/before.json` before writing. If an update or verification fails, it restores the attempted playlists' old rules and fixed track lists; any restore failure names the affected playlist. Unchanged rules are not reapplied, so repeating the command does not force a new shuffle. The local report is `smart-playlist-result.json`. Keep these files and credentials outside Git. This setup uses Navidrome's native playlist API and never writes directly to its database or music files.
 
 ## Local configuration
 

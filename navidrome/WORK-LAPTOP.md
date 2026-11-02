@@ -2,6 +2,8 @@
 
 Use the existing home Navidrome server and the same music account. The seven server playlists, favorites, and Daily Mix follow that account; the laptop only needs a player and the theme. There is no music import or database migration on the laptop.
 
+The five genre mixes and Your Daily Mix refresh on the home server after a rolling 24-hour interval, avoiding tracks played in the previous three days and 1–2 star tracks/artists. Daily Mix promotes loved and highly rated tracks. Refresh Playlists in Feishin or sync the Navidrome provider in Symfonium to see a refreshed selection. The rules are already on the server; do not run playlist setup tools on the work laptop. See [Smarter playlists](README.md#smarter-playlists) for the full behavior.
+
 ## Connect to the home server
 
 Connect through your existing private VPN/tunnel, then open the home Navidrome address in a browser and sign in. Use an address reachable from the laptop, such as your home PC's private VPN hostname and Navidrome port `4533`. `127.0.0.1:4533` on the laptop refers to the laptop itself.

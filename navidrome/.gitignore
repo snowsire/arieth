@@ -7,6 +7,7 @@
 !/LICENSE
 !/playlist-library-audit.py
 !/create-flac-mixes.py
+!/smart-playlists.py
 !/phone-server.py
 !/extract-web.py
 !/setup-web.py
