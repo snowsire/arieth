@@ -3,12 +3,14 @@
 !/.gitignore
 !/README.md
 !/FEISHIN.md
+!/WORK-LAPTOP.md
 !/LICENSE
 !/playlist-library-audit.py
 !/create-flac-mixes.py
 !/phone-server.py
 !/extract-web.py
 !/setup-web.py
+!/setup-desktop.py
 !/prepare-phone-settings.py
 !/install-phone-task.ps1
 !/polygon-atmosphere.py
@@ -19,6 +21,8 @@
 !/live-lyrics.css
 !/home-discovery.css
 !/genre-art.py
+!/visualizer-presets.json
+!/visualizer-stage.css
 !/web-manifest.json
 !/tests/
 !/web/

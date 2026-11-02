@@ -6,6 +6,8 @@ This repository contains the maintained customization sources and local web prox
 
 Navidrome manages the library and shared server playlists; Feishin and Symfonium are clients. See [README.md](README.md) for the library audit and FLAC playlist tools. The theme and phone-player customizations below belong to Feishin.
 
+For a second Windows PC, follow [Install on the work laptop](WORK-LAPTOP.md), including desktop stylesheet setup, importing the three visualizer presets, and connecting back to the home server.
+
 ## Run the web player
 
 Requires Python 3.9 or newer and Navidrome listening on `127.0.0.1:4533`.
@@ -27,13 +29,15 @@ On Windows, an elevated PowerShell can optionally run `./install-phone-task.ps1`
 
 ## Customize
 
-- `snow-music.css`, `crimson.css`, `polygon-atmosphere.css`, `live-lyrics.css`, and `home-discovery.css` form the current web theme, in that order.
+- `snow-music.css`, `crimson.css`, `polygon-atmosphere.css`, `live-lyrics.css`, `home-discovery.css`, and `visualizer-stage.css` form the current theme, in that order.
+- `setup-desktop.py` builds the combined desktop stylesheet and three individual visualizer configurations under ignored `local/desktop`. On Windows, `--install-css` backs up and installs the stylesheet in the current user's Feishin profile; enable Custom CSS in the app afterward.
 - `polygon-atmosphere.py` regenerates the geometric SVG backgrounds without external assets.
 - `genre-art.py` regenerates six local SVG textures in `home-discovery.css`: strings and lightning, orbital rings, punk checks, record grooves, a waveform, and equalizer bars. Run `python genre-art.py --check` to verify the generated artwork is current.
 - `prepare-phone-settings.py` defines web defaults and a versioned, one-time presentation migration. Existing authentication and unrelated preferences are preserved.
 - `web/mobile-polish.*`, `web/artist-backdrop.*`, and `web/album-art.*` extend the official web UI without editing its compiled bundles. Album art remains the fallback when no artist photo is available.
 - `web/home-discovery.js` adds a Daily Mix shortcut, taste-based genre links, and discovery labels. Genre discovery uses the existing same-origin Navidrome session and keeps native genre links when unavailable. `home-discovery.css` supplies the responsive layout and colorful genre cards; setup copies it into the web assets.
 - `dark-glass.css` retains the alternative glass theme. Desktop Feishin can use the CSS through its supported custom stylesheet setting; this repository does not replace the desktop executable.
+- `visualizer-presets.json` defines Neon Orbit, Crimson Afterglow, and Night Drive, with custom aurora/crimson gradients and a 60 FPS cap. `visualizer-stage.css` adds the dark stage, glow, and compact track-info overlay. Choose these presets in the existing AudioMotion visualizer settings. The `neon-1` web migration adds them without deleting user presets or changing playback volume or audio output.
 
 Run `python setup-web.py` after changes to theme files. The current settings migration is `crimson-5`; increase the revision when changing migration behavior so existing browsers receive it once. Keep native Feishin lyric timestamps and word cues intact. Line-only lyrics remain line-synchronized.
 

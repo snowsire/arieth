@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 root = Path(__file__).resolve().parent
-theme_files = ['snow-music.css', 'crimson.css', 'polygon-atmosphere.css', 'live-lyrics.css', 'home-discovery.css']
+theme_files = ['snow-music.css', 'crimson.css', 'polygon-atmosphere.css', 'live-lyrics.css', 'home-discovery.css', 'visualizer-stage.css']
 settings = {
     'SERVER_NAME': 'Snow Music', 'SERVER_TYPE': 'navidrome', 'SERVER_LOCK': 'true',
     'REMOTE_URL': '', 'LEGACY_AUTHENTICATION': 'false', 'ANALYTICS_DISABLED': 'true',
@@ -113,6 +113,28 @@ lines.append(r'''
     localStorage.setItem('store_settings',JSON.stringify(settings));
     localStorage.setItem('snow_lyrics_layout_revision','compact-1');
   } catch { console.warn('Snow Music compact lyrics could not be saved.'); }
+})();
+''')
+recipe = json.loads((root/'visualizer-presets.json').read_text(encoding='utf-8'))
+lines.append('(() => {\nconst recipe = '+json.dumps(recipe)+';'+r'''
+  try {
+    if (localStorage.getItem('snow_visualizer_revision') === 'neon-1') return;
+    const settings = JSON.parse(localStorage.getItem('store_settings') || '{"state":{},"version":34}');
+    settings.state ??= {};
+    const visualizer = settings.state.visualizer || {};
+    const old = visualizer.audiomotionanalyzer || {};
+    const names = new Set(recipe.gradients.map(gradient => gradient.name));
+    const customGradients = (old.customGradients || []).filter(gradient => !names.has(gradient.name)).concat(recipe.gradients);
+    const presets = recipe.presets.map(preset => ({...preset,value:{...recipe.base,...preset.value,customGradients}}));
+    const ids = new Set(presets.map(preset => preset.id));
+    settings.state.visualizer = {...visualizer,type:'audiomotionanalyzer',
+      audiomotionanalyzer:{...old,...presets[0].value,
+        presets:presets.concat((old.presets || []).filter(preset => !ids.has(preset.id)))},
+    };
+    settings.state.css = {...settings.state.css,enabled:true,content:window.FS_CSS_CONTENT};
+    localStorage.setItem('store_settings',JSON.stringify(settings));
+    localStorage.setItem('snow_visualizer_revision','neon-1');
+  } catch { console.warn('Snow Music visualizer preferences could not be saved.'); }
 })();
 ''')
 target = root/'web'/'settings.js'

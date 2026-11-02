@@ -1,0 +1,85 @@
+{
+  "base": {
+    "alphaBars": false,
+    "ansiBands": false,
+    "barSpace": 0.2,
+    "channelLayout": "single",
+    "colorMode": "gradient",
+    "fadePeaks": true,
+    "fftSize": 8192,
+    "fillAlpha": 0.7,
+    "frequencyScale": "log",
+    "gravity": 5.5,
+    "ledBars": false,
+    "linearAmplitude": false,
+    "lineWidth": 2.5,
+    "loRes": false,
+    "lumiBars": false,
+    "maxDecibels": -15,
+    "maxFPS": 60,
+    "maxFreq": 15000,
+    "minDecibels": -85,
+    "minFreq": 30,
+    "mirror": 0,
+    "noteLabels": false,
+    "opacity": 1,
+    "outlineBars": false,
+    "peakFadeTime": 450,
+    "peakHoldTime": 220,
+    "peakLine": false,
+    "radial": false,
+    "radialInvert": false,
+    "radius": 0.28,
+    "reflexAlpha": 0.16,
+    "reflexBright": 1,
+    "reflexFit": true,
+    "reflexRatio": 0,
+    "roundBars": true,
+    "showFPS": false,
+    "showPeaks": true,
+    "showScaleX": false,
+    "showScaleY": false,
+    "smoothing": 0.65,
+    "spinSpeed": 0,
+    "splitGradient": false,
+    "trueLeds": false
+  },
+  "gradients": [
+    {
+      "name": "arieth-aurora",
+      "dir": "h",
+      "colorStops": [
+        {"color": "#ff426c", "pos": 0, "positionEnabled": true},
+        {"color": "#c56dff", "pos": 0.35, "positionEnabled": true},
+        {"color": "#647cff", "pos": 0.65, "positionEnabled": true},
+        {"color": "#42ebd3", "pos": 1, "positionEnabled": true}
+      ]
+    },
+    {
+      "name": "arieth-crimson",
+      "dir": "h",
+      "colorStops": [
+        {"color": "#ffbd79", "pos": 0, "positionEnabled": true},
+        {"color": "#ff426c", "pos": 0.45, "positionEnabled": true},
+        {"color": "#b85aff", "pos": 1, "positionEnabled": true}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "id": "arieth-neon-orbit",
+      "name": "Neon Orbit",
+      "value": {"mode": 3, "radial": true, "spinSpeed": 1.5, "gradient": "arieth-aurora"}
+    },
+    {
+      "id": "arieth-afterglow",
+      "name": "Crimson Afterglow",
+      "value": {"mode": 10, "channelLayout": "dual-combined", "gradient": "arieth-crimson", "gradientLeft": "arieth-crimson", "gradientRight": "arieth-aurora", "fillAlpha": 0.22, "showPeaks": false, "reflexRatio": 0.22}
+    },
+    {
+      "id": "arieth-night-drive",
+      "name": "Night Drive",
+      "value": {"mode": 4, "channelLayout": "dual-horizontal", "gradient": "arieth-aurora", "gradientLeft": "arieth-aurora", "gradientRight": "arieth-crimson", "mirror": -1, "reflexRatio": 0.18}
+    }
+  ]
+}

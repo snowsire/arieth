@@ -7,6 +7,8 @@ The complete music project lives in [navidrome/](navidrome/README.md):
 
 See [Navidrome and playlist setup](navidrome/README.md) or [Feishin player setup](navidrome/FEISHIN.md).
 
+For the Windows desktop app, theme, and visualizer presets on another PC, follow [Install on the work laptop](navidrome/WORK-LAPTOP.md).
+
 ```sh
 git clone https://github.com/snowsire/arieth.git
 cd arieth/navidrome

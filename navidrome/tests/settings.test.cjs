@@ -137,3 +137,36 @@ test('compact lyrics fit more lines while preserving timing and unrelated displa
   app.run();
   assert.equal(app.read('store_settings').state.lyricsDisplay.default.gap,16);
 });
+
+test('visualizer upgrade adds audio-reactive presets and preserves user configuration', () => {
+  const app=browser({
+    snow_theme_revision:'crimson-5',snow_home_revision:'discovery-1',
+    snow_lyrics_revision:'responsive-1',snow_lyrics_layout_revision:'compact-1',
+    store_settings:JSON.stringify({version:34,state:{
+      playback:{volume:0.37,type:'local'},lyrics:{lineLeadTimeMs:650},
+      visualizer:{type:'audiomotionanalyzer',butterchurn:{cycleTime:45},audiomotionanalyzer:{
+        volume:0.8,presets:[{id:'my-preset',name:'My preset',value:{mode:10}}],
+        customGradients:[{name:'my-gradient',colorStops:[{color:'#fff'}]}],
+      }},
+    }}),
+  });
+  app.run();
+  const state=app.read('store_settings').state;
+  const visualizer=state.visualizer.audiomotionanalyzer;
+  assert.equal(visualizer.radial,true);
+  assert.equal(visualizer.maxFPS,60);
+  assert.equal(visualizer.fftSize,8192);
+  assert.equal(visualizer.volume,0.8);
+  assert.equal(state.playback.volume,0.37);
+  assert.equal(state.playback.type,'local');
+  assert.equal(state.lyrics.lineLeadTimeMs,650);
+  assert.equal(state.visualizer.butterchurn.cycleTime,45);
+  assert.deepEqual(visualizer.presets.slice(0,3).map(p=>p.name),['Neon Orbit','Crimson Afterglow','Night Drive']);
+  assert.ok(visualizer.presets.some(p=>p.id==='my-preset'));
+  assert.ok(visualizer.customGradients.some(g=>g.name==='my-gradient'));
+  assert.ok(visualizer.presets.every(p=>!p.id.startsWith('arieth-')||p.value.customGradients.some(g=>g.name===p.value.gradient)));
+  visualizer.radial=false;
+  app.values.set('store_settings',JSON.stringify({version:34,state}));
+  app.run();
+  assert.equal(app.read('store_settings').state.visualizer.audiomotionanalyzer.radial,false);
+});
