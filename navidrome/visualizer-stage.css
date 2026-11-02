@@ -1,10 +1,10 @@
 /* A focused stage for Feishin's real audio-reactive visualizers. */
 body .fs-full-screen-visualizer-module-container {
-  background: radial-gradient(ellipse at 50% 42%, #201235, #0a0a13 62%, #06070c);
+  background: radial-gradient(ellipse at 50% 42%, #493064, #1b1c32 62%, #10121d);
 }
 body .fs-full-screen-visualizer-module-visualizer-container {
-  background: radial-gradient(ellipse at 25% 90%, rgba(237,48,72,0.09), transparent 48%),
-    radial-gradient(ellipse at 80% 15%, rgba(66,235,211,0.06), transparent 45%);
+  background: radial-gradient(ellipse at 25% 90%, rgba(255,105,145,0.2), transparent 58%),
+    radial-gradient(ellipse at 80% 15%, rgba(108,255,231,0.16), transparent 55%);
 }
 body .fs-full-screen-visualizer-module-visualizer-container::after {
   content: '';
@@ -12,21 +12,21 @@ body .fs-full-screen-visualizer-module-visualizer-container::after {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  box-shadow: inset 0 0 120px 30px rgba(3,4,10,0.35);
+  box-shadow: inset 0 0 90px 16px rgba(3,4,10,0.15);
 }
 body .fs-full-screen-visualizer-module-visualizer-container canvas {
-  filter: drop-shadow(0 0 8px rgba(156,100,235,0.35));
+  filter: brightness(1.22) saturate(1.12) drop-shadow(0 0 6px rgba(190,157,255,0.55)) drop-shadow(0 0 22px rgba(126,207,255,0.32));
 }
 body .fs-visualizer-module-icon-group {
   padding: 6px;
   border-radius: 18px;
-  background: rgba(14,12,24,0.6);
+  background: rgba(35,28,57,0.66);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(211,178,255,0.12);
+  border: 1px solid rgba(226,207,255,0.24);
 }
 body .fs-visualizer-module-container:focus-within .fs-visualizer-module-icon-group > * { opacity: 1; }
 body .fs-full-screen-visualizer-module-song-info-backdrop {
-  background: linear-gradient(0deg,rgba(4,5,12,0.65),transparent 45%);
+  background: linear-gradient(0deg,rgba(8,9,20,0.4),transparent 45%);
 }
 body .fs-full-screen-visualizer-module-song-info-overlay {
   top: auto;
@@ -38,14 +38,14 @@ body .fs-full-screen-visualizer-module-song-info-overlay {
   padding: 16px 22px;
   text-align: left;
   border-radius: 20px;
-  background: rgba(12,10,23,0.75);
+  background: rgba(29,23,46,0.72);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(211,178,255,0.14);
+  border: 1px solid rgba(226,207,255,0.24);
   box-shadow: 0 10px 40px rgba(0,0,0,0.25);
 }
 body .fs-full-screen-visualizer-module-song-info-overlay > div { align-items: flex-start; gap: 5px; }
 body .fs-full-screen-visualizer-module-song-info-title { font-size: clamp(20px,2.2vw,32px); line-height: 1.15; color: #faf2ff; letter-spacing: -0.035em; }
-body .fs-full-screen-visualizer-module-song-info-artist { font-size: clamp(13px,1.2vw,18px); color: #c3b1d5; }
+body .fs-full-screen-visualizer-module-song-info-artist { font-size: clamp(13px,1.2vw,18px); color: #dfcdeb; }
 @media (max-width: 768px) {
   body .fs-visualizer-module-icon-group > * { opacity: 1; }
   body .fs-full-screen-visualizer-module-song-info-overlay { left: 16px; bottom: 18px; max-width: calc(100% - 32px); padding: 12px 16px; }

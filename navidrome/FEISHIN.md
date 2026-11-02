@@ -39,6 +39,8 @@ On Windows, an elevated PowerShell can optionally run `./install-phone-task.ps1`
 - `dark-glass.css` retains the alternative glass theme. Desktop Feishin can use the CSS through its supported custom stylesheet setting; this repository does not replace the desktop executable.
 - `visualizer-presets.json` defines Neon Orbit, Crimson Afterglow, and Night Drive, with custom aurora/crimson gradients and a 60 FPS cap. `visualizer-stage.css` adds the dark stage, glow, and compact track-info overlay. Choose these presets in the existing AudioMotion visualizer settings. The `neon-1` web migration adds them without deleting user presets or changing playback volume or audio output.
 
+The `light-1` web migration refreshes the stylesheet with a brighter violet stage, stronger cyan/rose lighting, and a wider spectrum glow. It preserves your selected visualizer and saved presets. Desktop users receive the same lighting through `setup-desktop.py --install-css`.
+
 Run `python setup-web.py` after changes to theme files. The current settings migration is `crimson-5`; increase the revision when changing migration behavior so existing browsers receive it once. Keep native Feishin lyric timestamps and word cues intact. Line-only lyrics remain line-synchronized.
 
 Home preferences have a separate migration, `discovery-1`, which places playlists and genres first and disables both newly added and recently released shelves without resetting playback or lyric choices. On desktop Feishin, use Settings > General > Home configuration to use that same order and turn off those two shelves. The combined CSS can be applied through the supported custom stylesheet setting; the native desktop Home uses its own playlist shelf instead of the web-only banner.

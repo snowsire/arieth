@@ -136,6 +136,17 @@ lines.append('(() => {\nconst recipe = '+json.dumps(recipe)+';'+r'''
     localStorage.setItem('snow_visualizer_revision','neon-1');
   } catch { console.warn('Snow Music visualizer preferences could not be saved.'); }
 })();
+
+(() => {
+  try {
+    if (localStorage.getItem('snow_visualizer_light_revision') === 'light-1') return;
+    const settings = JSON.parse(localStorage.getItem('store_settings') || '{"state":{},"version":34}');
+    settings.state ??= {};
+    settings.state.css = {...settings.state.css,enabled:true,content:window.FS_CSS_CONTENT};
+    localStorage.setItem('store_settings',JSON.stringify(settings));
+    localStorage.setItem('snow_visualizer_light_revision','light-1');
+  } catch { console.warn('Snow Music visualizer lighting could not be saved.'); }
+})();
 ''')
 target = root/'web'/'settings.js'
 temporary = target.with_suffix('.js.tmp')

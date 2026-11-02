@@ -170,3 +170,24 @@ test('visualizer upgrade adds audio-reactive presets and preserves user configur
   app.run();
   assert.equal(app.read('store_settings').state.visualizer.audiomotionanalyzer.radial,false);
 });
+
+test('brighter lighting refreshes CSS without resetting the selected visualizer', () => {
+  const visualizer={type:'butterchurn',butterchurn:{cycleTime:45},
+    audiomotionanalyzer:{radial:false,presets:[{id:'custom',name:'My mix',value:{mode:10}}]}};
+  const app=browser({
+    snow_theme_revision:'crimson-5',snow_home_revision:'discovery-1',
+    snow_lyrics_revision:'responsive-1',snow_lyrics_layout_revision:'compact-1',
+    snow_visualizer_revision:'neon-1',
+    store_settings:JSON.stringify({version:34,state:{visualizer,playback:{volume:0.37},css:{enabled:true,content:'old'}}}),
+  });
+  app.run();
+  const state=app.read('store_settings').state;
+  assert.deepEqual(state.visualizer,visualizer);
+  assert.equal(state.playback.volume,0.37);
+  assert.match(state.css.content,/brightness\(1\.22\)/);
+  assert.equal(app.values.get('snow_visualizer_light_revision'),'light-1');
+  state.css.content='personal adjustment';
+  app.values.set('store_settings',JSON.stringify({version:34,state}));
+  app.run();
+  assert.equal(app.read('store_settings').state.css.content,'personal adjustment');
+});
