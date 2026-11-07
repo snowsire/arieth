@@ -37,6 +37,56 @@ python smart-playlists.py --apply
 
 The tool requires the existing seven playlists and recognizes only the Arieth-managed mix comments. It reads the current library and stores native rule and track snapshots in `playlist-backups/smart-upgrade-<timestamp>/before.json` before writing. If an update or verification fails, it restores the attempted playlists' old rules and fixed track lists; any restore failure names the affected playlist. Unchanged rules are not reapplied, so repeating the command does not force a new shuffle. The local report is `smart-playlist-result.json`. Keep these files and credentials outside Git. This setup uses Navidrome's native playlist API and never writes directly to its database or music files.
 
+## Personal listening playlists
+
+`build-taste-playlists.py` creates six fixed, editable playlists from your
+available FLAC tracks and local Spotify listening exports:
+
+- **On Repeat - Your Favorites**: listening favorites, with recent favorites weighted higher.
+- **Heavy Hearts, Loud Guitars**: melodic heavy music and post-hardcore.
+- **Windows Down**: pop punk and emo.
+- **After Hours - Bass & Trance**: electronic music, bass and trance.
+- **Bars for the Drive**: hip-hop.
+- **The Other Tracks**: underplayed album tracks from familiar artists.
+
+Each list contains 35 tracks. Selections share no repeated artist/title pair
+across the six lists, allow at most three tracks per artist and two per album
+within a list, and leave two other artists between repeat appearances. The
+builder checks local FLAC headers before selecting files. It excludes live,
+acoustic and demo recordings; electronic remixes remain eligible. Listening
+counts describe the supplied export, rather than a promise of complete history.
+
+Run this on the music-server machine using Python 3.9+. The data folder must
+contain `credentials.json`, the local Navidrome database at
+`data/navidrome.db`, and the inventory written by `playlist-library-audit.py`.
+The export folder needs `top_tracks.csv`, `heavy_rotation.csv`,
+`recent_favourites.csv`, `saved_tracks.csv` and `top_artists.csv` from the local
+Spotify analysis. Artist/track columns are `Artist` and `Track`; listening
+counts use `Plays_30s_plus`. These inputs remain private and outside Git.
+
+From `arieth/navidrome` in PowerShell:
+
+```powershell
+$env:NAVIDROME_DATA_DIR = 'C:\path\to\your\navidrome-data'
+$env:SPOTIFY_EXPORT_DIR = 'C:\path\to\your\spotify-analysis'
+$env:NAVIDROME_MUSIC_DIR = 'D:\path\to\your\music'
+python playlist-library-audit.py
+python build-taste-playlists.py
+# Inspect personal-playlist-plan.json in the data folder, then create:
+python build-taste-playlists.py --create
+```
+
+The default folders are `local/`, `local/spotify/` and `local/music/` beside the
+script. Preview writes a local plan only. Creation makes private server
+playlists and verifies the selected tracks using Feishin and Symfonium API
+client identifiers. Actual app playback is a separate device check. Existing
+matching lists are reused; different content or an unrelated list with the
+same name causes a refusal instead of an overwrite. The operation snapshots
+existing playlist metadata under `playlist-backups/personal-<timestamp>/` and
+writes a result journal, including any partial creation, to
+`personal-playlist-result.json`. The music files and existing playlists are
+unchanged. Refresh Feishin's Playlists view or sync Symfonium to see the lists.
+
 ## Local configuration
 
 Requires Python 3.9 or newer. Set `NAVIDROME_DATA_DIR` to a local folder containing `credentials.json`, with `username` and `password` fields. The same folder receives the inventory, preview, creation report, and playlist snapshots. You can point this variable at an existing installation folder; no live files need to move.
