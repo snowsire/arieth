@@ -87,6 +87,65 @@ writes a result journal, including any partial creation, to
 `personal-playlist-result.json`. The music files and existing playlists are
 unchanged. Refresh Feishin's Playlists view or sync Symfonium to see the lists.
 
+## Signature listening collections and backups
+
+The signature scripts contain 16 hand-sequenced playlists across three
+collections. Their 315 artist/title selections do not repeat across the
+collections. These are fixed running orders with chosen opening and closing
+tracks, separate from the daily smart mixes and listening-history selections.
+
+| Script | Playlists |
+| --- | --- |
+| `create-signature-playlists.py` | Teeth & Heart; Velvet & Venom; 2005 Never Ended; Neon Pressure; When the Noise Stops |
+| `create-more-signature-playlists.py` | No Brakes; Back Seat Choir; First Light, Last Dance; Concrete & Conscience; Smoke & Signals |
+| `create-signature-volume-three.py` | Feedback Season; Letters You Never Sent; Nightfall on the Long Way Home; Beautiful Machines; Borrowed Voices; Sunburn & Bad Ideas |
+
+Use the same `NAVIDROME_DATA_DIR` and `NAVIDROME_MUSIC_DIR` as the personal
+playlist builder. The scripts need the current local library inventory and
+Navidrome database at `NAVIDROME_DATA_DIR/data/navidrome.db`. They do not require
+Spotify exports or previous generated plans. The default data folder is
+`local/` beside the scripts, and the default music folder is `local/music/`.
+`NAVIDROME_URL` selects the existing music server, defaulting to loopback port
+4533. Run on the machine that can read that database and music folder.
+
+From `arieth/navidrome`, after setting those environment variables:
+
+```powershell
+python playlist-library-audit.py
+python create-signature-playlists.py
+python create-more-signature-playlists.py
+python create-signature-volume-three.py
+# After reviewing the plans in the data folder:
+python create-signature-playlists.py --create
+python create-more-signature-playlists.py --create
+python create-signature-volume-three.py --create
+python save-playlists.py
+```
+
+Preview checks the selected local files, including FLAC with a leading ID3
+tag, and writes the ordered plan. Missing or invalid selections stop creation;
+the scripts do not silently substitute recordings. Live, demo, acoustic and
+remix versions are excluded. Each volume checks the earlier collections'
+source definitions to prevent repeats without reading private plan files.
+
+Creation makes private server playlists, checks every name before writing,
+and verifies track order through the Feishin and Symfonium API client
+identifiers. An unchanged existing set is reused. A playlist with different
+content or comment is refused instead of overwritten. Existing playlist
+snapshots and a creation journal are saved locally. If creation stops partway,
+the journal retains the IDs already created so they can be inspected before
+retrying. Server verification does not operate the phone app; import the
+server playlists in Symfonium or refresh Feishin's playlist view.
+
+`save-playlists.py` reads all server playlists and their native smart rules.
+It writes a dated directory under `playlist-backups/` containing
+`playlists.json`, `native-rules.json`, `manifest.json` and ordered UTF-8 M3U8
+exports. `saved-playlists-latest.json` points to the most recent completed
+backup. It does not change the server playlists or copy audio. Exports contain
+local file paths and server IDs, so retain the music at those paths and keep
+the backup private. Credentials, generated inventories, plans, journals,
+databases and exports remain outside Git.
+
 ## Local configuration
 
 Requires Python 3.9 or newer. Set `NAVIDROME_DATA_DIR` to a local folder containing `credentials.json`, with `username` and `password` fields. The same folder receives the inventory, preview, creation report, and playlist snapshots. You can point this variable at an existing installation folder; no live files need to move.

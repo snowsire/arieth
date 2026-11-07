@@ -9,6 +9,10 @@
 !/create-flac-mixes.py
 !/smart-playlists.py
 !/build-taste-playlists.py
+!/create-signature-playlists.py
+!/create-more-signature-playlists.py
+!/create-signature-volume-three.py
+!/save-playlists.py
 !/phone-server.py
 !/extract-web.py
 !/setup-web.py
