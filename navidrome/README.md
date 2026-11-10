@@ -147,6 +147,56 @@ the backup private. Credentials, generated inventories, plans, journals,
 databases and exports remain outside Git.
 
 ## Local configuration
+## Garmin watch playlists
+
+`export-watch-playlist.py` exports one existing Navidrome playlist as a folder
+of numbered MP3 tracks plus ordered `.m3u` and `.m3u8` files. It reads the live
+playlist through the Navidrome API and streams the tracks from the server, so
+it does not depend on database paths matching the current music-folder layout.
+Repeated playlist entries reuse one MP3 while their positions remain repeated
+in the playlist. Each MP3 is written as 320 kbps, 44.1 kHz stereo with ID3v2.3
+tags, then checked for codec, duration, artist/title tags and a complete decode.
+An `export.json` manifest records the file hashes and playlist order. A
+progress JSON sits beside the bundle while it is being built.
+
+Requirements are a reachable Navidrome server, `credentials.json` in
+`NAVIDROME_DATA_DIR`, and `ffmpeg` plus `ffprobe` on `PATH` (or paths supplied
+with `--ffmpeg` and `--ffprobe`). `NAVIDROME_URL` selects the server and
+defaults to `http://127.0.0.1:4533`. Keep credentials and output outside Git.
+
+From `arieth/navidrome` in PowerShell, with the same data-folder configuration
+used by the playlist tools:
+
+```powershell
+$env:NAVIDROME_DATA_DIR = 'C:\path\to\your\navidrome-data'
+$env:NAVIDROME_WATCH_EXPORT_DIR = 'D:\NativeAI\watch-exports'
+python export-watch-playlist.py "2005 Never Ended"
+```
+
+The named bundle contains the MP3 files, both playlist formats and manifest.
+The default output is ignored `navidrome/local/watch-exports`; set
+`NAVIDROME_WATCH_EXPORT_DIR` or pass `--output-dir` to place it elsewhere. The
+exporter refuses to overwrite an existing bundle. An interrupted export keeps
+its hidden staging folder and progress report for inspection; it does not
+publish a partial bundle as complete.
+
+`transfer-watch-playlist.ps1` copies one completed bundle to a Garmin's
+`Primary/Music/<playlist>` folder over USB/MTP. It checks the source hashes,
+available watch storage, playlist order, and refuses to overwrite an existing
+same-named watch folder. It reads the copied folder back and verifies every
+MP3 SHA-256 plus the `.m3u` ordering before writing a transfer receipt beside
+the bundle. Keep the watch connected and awake until the receipt is reported.
+Run it with:
+
+```powershell
+.\transfer-watch-playlist.ps1 -BundlePath 'D:\NativeAI\watch-exports\2005 Never Ended' -WatchName 'fenix 6X Sapphire'
+```
+
+The transfer script never deletes or replaces watch files. Generated MP3s,
+M3U files, manifests, progress reports and transfer receipts are local user
+data and must not be committed.
+
+## Local configuration
 
 Requires Python 3.9 or newer. Set `NAVIDROME_DATA_DIR` to a local folder containing `credentials.json`, with `username` and `password` fields. The same folder receives the inventory, preview, creation report, and playlist snapshots. You can point this variable at an existing installation folder; no live files need to move.
 

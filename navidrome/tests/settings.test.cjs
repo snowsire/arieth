@@ -27,7 +27,7 @@ test('fresh browser gets a complete home order and visible song metadata', () =>
   const state = app.read('store_settings').state;
   assert.equal(state.general.homeItems[0].id, 'playlists');
   assert.equal(state.general.homeItems.length, 7);
-  assert.deepEqual(state.general.homeItems.filter(item => item.disabled).map(item => item.id), ['recentlyAdded', 'recentlyReleased']);
+  assert.deepEqual(state.general.homeItems.filter(item => item.disabled).map(item => item.id), ['recentlyReleased']);
   assert.deepEqual(state.general.playerItems.map(item => item.id), ['title', 'artist', 'album']);
   assert.ok(state.general.playerItems.every(item => !item.disabled));
   assert.equal(state.lyrics.lineLeadTimeMs, 650);
@@ -84,14 +84,15 @@ test('existing theme gets discovery Home without resetting playback or lyric cho
   assert.equal(state.playback.volume, 17);
   assert.equal(state.lyrics.follow, false);
   assert.equal(state.lyrics.delayMs, 300);
-  assert.ok(state.general.homeItems.filter(item => ['recentlyAdded','recentlyReleased'].includes(item.id)).every(item => item.disabled));
-  assert.equal(app.values.get('snow_home_revision'), 'discovery-1');
+  assert.equal(state.general.homeItems.find(item => item.id === 'recentlyAdded').disabled, false);
+  assert.equal(state.general.homeItems.find(item => item.id === 'recentlyReleased').disabled, true);
+  assert.equal(app.values.get('snow_home_revision'), 'discovery-2');
   assert.ok(state.css.content.includes('snow-discovery-hero'));
 });
 
 test('responsive lyrics migrate once and preserve custom offsets and Home settings', () => {
   const app = browser({
-    snow_theme_revision:'crimson-5', snow_home_revision:'discovery-1',
+    snow_theme_revision:'crimson-5', snow_home_revision:'discovery-2',
     store_settings:JSON.stringify({version:34,state:{
       general:{homeItems:[{id:'recentlyAdded',disabled:true}]},
       lyrics:{lineLeadTimeMs:250,delayMs:320,follow:false,preferLocalLyrics:false},
@@ -115,7 +116,7 @@ test('responsive lyrics migrate once and preserve custom offsets and Home settin
 
 test('compact lyrics fit more lines while preserving timing and unrelated display choices', () => {
   const app=browser({
-    snow_theme_revision:'crimson-5', snow_home_revision:'discovery-1', snow_lyrics_revision:'responsive-1',
+    snow_theme_revision:'crimson-5', snow_home_revision:'discovery-2', snow_lyrics_revision:'responsive-1',
     store_settings:JSON.stringify({version:34,state:{
       lyrics:{lineLeadTimeMs:650,delayMs:280,follow:true},
       lyricsDisplay:{default:{fontSize:32,gap:28,opacityNonActive:0.4},sidebar:{gap:22,paddingLeft:3}},
@@ -140,7 +141,7 @@ test('compact lyrics fit more lines while preserving timing and unrelated displa
 
 test('visualizer upgrade adds audio-reactive presets and preserves user configuration', () => {
   const app=browser({
-    snow_theme_revision:'crimson-5',snow_home_revision:'discovery-1',
+    snow_theme_revision:'crimson-5',snow_home_revision:'discovery-2',
     snow_lyrics_revision:'responsive-1',snow_lyrics_layout_revision:'compact-1',
     store_settings:JSON.stringify({version:34,state:{
       playback:{volume:0.37,type:'local'},lyrics:{lineLeadTimeMs:650},
@@ -175,7 +176,7 @@ test('brighter lighting refreshes CSS without resetting the selected visualizer'
   const visualizer={type:'butterchurn',butterchurn:{cycleTime:45},
     audiomotionanalyzer:{radial:false,presets:[{id:'custom',name:'My mix',value:{mode:10}}]}};
   const app=browser({
-    snow_theme_revision:'crimson-5',snow_home_revision:'discovery-1',
+    snow_theme_revision:'crimson-5',snow_home_revision:'discovery-2',
     snow_lyrics_revision:'responsive-1',snow_lyrics_layout_revision:'compact-1',
     snow_visualizer_revision:'neon-1',
     store_settings:JSON.stringify({version:34,state:{visualizer,playback:{volume:0.37},css:{enabled:true,content:'old'}}}),

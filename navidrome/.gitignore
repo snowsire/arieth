@@ -13,6 +13,8 @@
 !/create-more-signature-playlists.py
 !/create-signature-volume-three.py
 !/save-playlists.py
+!/export-watch-playlist.py
+!/transfer-watch-playlist.ps1
 !/phone-server.py
 !/extract-web.py
 !/setup-web.py

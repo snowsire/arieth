@@ -64,7 +64,7 @@ lines.append(r'''
 // Home has its own revision so this update preserves playback and lyric choices.
 (() => {
   try {
-    if (localStorage.getItem('snow_home_revision') === 'discovery-1') return;
+    if (localStorage.getItem('snow_home_revision') === 'discovery-2') return;
     const settings = JSON.parse(localStorage.getItem('store_settings') || '{"state":{},"version":34}');
     settings.state ??= {};
     settings.state.general ??= {};
@@ -72,7 +72,7 @@ lines.append(r'''
     const old = settings.state.general.homeItems || [];
     settings.state.general.homeItems = order.map(id => ({
       ...old.find(item => item.id === id), id,
-      disabled: id === 'recentlyAdded' || id === 'recentlyReleased',
+      disabled: id === 'recentlyReleased',
     })).concat(old.filter(item => !order.includes(item.id)));
     settings.state.general.homeFeature = true;
     settings.state.general.homeFeatureStyle = 'single';
@@ -83,7 +83,7 @@ lines.append(r'''
       app.state.sidebar.leftWidth = '280px';
       localStorage.setItem('store_app', JSON.stringify(app));
     }
-    localStorage.setItem('snow_home_revision', 'discovery-1');
+    localStorage.setItem('snow_home_revision', 'discovery-2');
   } catch { console.warn('Snow Music Home preferences could not be saved.'); }
 })();
 
