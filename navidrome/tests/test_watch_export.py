@@ -1,5 +1,7 @@
 import importlib.util
+import hashlib
 from pathlib import Path
+import tempfile
 import unittest
 
 
@@ -37,6 +39,56 @@ class WatchExportTests(unittest.TestCase):
             '#EXTM3U', '#PLAYLIST:Safe Name', '#EXTINF:12,Artist #EXTINF:1,Injected - Song Name',
             '01 - Song.mp3',
         ])
+
+    def test_extend_copies_only_tracks_still_at_their_manifest_position(self):
+        songs = [
+            {'id': 'keep', 'artist': 'Artist', 'title': 'Keep'},
+            {'id': 'moved', 'artist': 'Artist', 'title': 'Moved'},
+        ]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            destination = root / 'old'
+            staging = root / 'new'
+            destination.mkdir()
+            staging.mkdir()
+            files = {
+                '0001 - Artist - Keep.mp3': b'keep',
+                '0003 - Artist - Moved.mp3': b'moved',
+                '0002 - Artist - Removed.mp3': b'removed',
+            }
+            for name, content in files.items():
+                (destination / name).write_bytes(content)
+            existing = {'files': [
+                {'id': 'keep', 'file': '0001 - Artist - Keep.mp3',
+                 'sha256': hashlib.sha256(files['0001 - Artist - Keep.mp3']).hexdigest()},
+                {'id': 'removed', 'file': '0002 - Artist - Removed.mp3',
+                 'sha256': hashlib.sha256(files['0002 - Artist - Removed.mp3']).hexdigest()},
+                {'id': 'moved', 'file': '0003 - Artist - Moved.mp3',
+                 'sha256': hashlib.sha256(files['0003 - Artist - Moved.mp3']).hexdigest()},
+            ]}
+            WATCH_EXPORT.copy_reusable_export(existing, destination, staging, songs)
+            self.assertEqual([path.name for path in staging.iterdir()],
+                             ['0001 - Artist - Keep.mp3'])
+
+    def test_extend_rejects_malformed_or_duplicate_manifest_records(self):
+        songs = [{'id': 'one', 'artist': 'Artist', 'title': 'One'}]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            root.joinpath('old').mkdir()
+            root.joinpath('new').mkdir()
+            with self.assertRaisesRegex(ValueError, 'valid file list'):
+                WATCH_EXPORT.copy_reusable_export({}, root / 'old', root / 'new', songs)
+            duplicate = {'files': [
+                {'id': 'one', 'file': 'a.mp3', 'sha256': 'a'},
+                {'id': 'one', 'file': 'b.mp3', 'sha256': 'b'},
+            ]}
+            with self.assertRaisesRegex(ValueError, 'duplicate track ID'):
+                WATCH_EXPORT.copy_reusable_export(duplicate, root / 'old', root / 'new', songs)
+
+    def test_resume_and_extend_modes_are_mutually_exclusive(self):
+        with self.assertRaisesRegex(ValueError, 'cannot be used together'):
+            WATCH_EXPORT.export_playlist('Playlist', '.', resume_dir='staging',
+                                         extend_existing=True)
 
 
 if __name__ == '__main__':

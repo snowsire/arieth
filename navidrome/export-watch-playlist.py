@@ -74,7 +74,33 @@ def verify_mp3(path, song, ffprobe, ffmpeg):
     return {'bytes': path.stat().st_size, 'sha256': file_hash(path)}
 
 
-def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_name='ffprobe'):
+def copy_reusable_export(existing, destination, staging, songs):
+    """Copy only files whose manifest identity and current position still match."""
+    records = existing.get('files')
+    if not isinstance(records, list):
+        raise ValueError('The existing export manifest has no valid file list.')
+    by_id = {}
+    for record in records:
+        if not isinstance(record, dict) or not all(record.get(key) for key in ('id', 'file', 'sha256')):
+            raise ValueError('The existing export manifest has an invalid file record.')
+        if record['id'] in by_id:
+            raise ValueError('The existing export manifest contains a duplicate track ID.')
+        by_id[record['id']] = record
+    for number, song in enumerate(songs, 1):
+        record = by_id.get(song['id'])
+        expected = f"{number:04d} - {safe_filename(song['artist'] + ' - ' + song['title'], 150)}.mp3"
+        if not record or record['file'] != expected:
+            continue
+        source = destination / record['file']
+        if not source.is_file() or file_hash(source) != record['sha256']:
+            raise RuntimeError(f'Existing export failed verification: {source}')
+        shutil.copy2(source, staging / record['file'])
+
+
+def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_name='ffprobe',
+                    resume_dir=None, skip_ids=(), extend_existing=False):
+    if resume_dir and extend_existing:
+        raise ValueError('Resume and extend modes cannot be used together.')
     data_dir = Path(os.environ.get('NAVIDROME_DATA_DIR', ROOT / 'local')).expanduser().resolve()
     helper = runpy.run_path(str(ROOT / 'playlist-library-audit.py'))
     api = helper['api']
@@ -87,6 +113,10 @@ def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_nam
     songs = playlist.get('entry', [])
     if not songs or any(not song.get('id') or not song.get('artist') or not song.get('title') for song in songs):
         raise ValueError('The playlist is empty or has an entry without an ID, artist, or title.')
+    skip_ids = set(skip_ids)
+    songs = [song for song in songs if song['id'] not in skip_ids]
+    if not songs:
+        raise ValueError('No playlist entries remain after applying the skip list.')
 
     unique_songs = {}
     for song in songs:
@@ -95,7 +125,7 @@ def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_nam
     output_dir = Path(output_dir).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     destination = output_dir / safe_name
-    if destination.exists():
+    if destination.exists() and not extend_existing:
         raise FileExistsError(f'Export already exists; refusing to overwrite: {destination}')
 
     ffmpeg = resolve_executable(ffmpeg_name, 'FFmpeg')
@@ -105,7 +135,20 @@ def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_nam
     if shutil.disk_usage(output_dir).free < minimum_free:
         raise RuntimeError('Not enough free space for the estimated MP3 export and staging files.')
 
-    staging = Path(tempfile.mkdtemp(prefix=f'.{safe_name}-', dir=output_dir))
+    if resume_dir:
+        staging = Path(resume_dir).expanduser().resolve()
+        if staging.parent != output_dir or not staging.is_dir():
+            raise ValueError('Resume directory must be an existing folder directly inside the output directory.')
+    elif extend_existing:
+        if not destination.is_dir() or not (destination / 'export.json').is_file():
+            raise ValueError('The existing export does not contain an export manifest.')
+        existing = json.loads((destination / 'export.json').read_text(encoding='utf-8'))
+        if existing.get('playlist') != playlist['name']:
+            raise ValueError('The existing export manifest belongs to a different playlist.')
+        staging = Path(tempfile.mkdtemp(prefix=f'.{safe_name}-extend-', dir=output_dir))
+        copy_reusable_export(existing, destination, staging, list(unique_songs.values()))
+    else:
+        staging = Path(tempfile.mkdtemp(prefix=f'.{safe_name}-', dir=output_dir))
     progress_path = output_dir / f'{safe_name}-progress.json'
     credentials = json.loads((data_dir / 'credentials.json').read_text(encoding='utf-8-sig'))
     records = []
@@ -126,6 +169,24 @@ def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_nam
             stem = safe_filename(label, 150)
             filename = f'{number:04d} - {stem}.mp3'
             target = staging / filename
+            if target.exists():
+                try:
+                    verified = verify_mp3(target, song, ffprobe, ffmpeg)
+                except (RuntimeError, subprocess.CalledProcessError, json.JSONDecodeError, KeyError, ValueError):
+                    target.unlink()
+                    print(json.dumps({'track': number, 'total': len(unique_songs),
+                                      'name': label, 'status': 'replacing-invalid'}), flush=True)
+                else:
+                    records.append({
+                        'id': song['id'], 'artist': song['artist'], 'title': song['title'],
+                        'duration': int(song.get('duration') or 0), 'file': filename,
+                        'bytes': verified['bytes'], 'sha256': verified['sha256'],
+                    })
+                    progress.update({'completed_tracks': number, 'last_completed': label})
+                    write_progress()
+                    print(json.dumps({'track': number, 'total': len(unique_songs),
+                                      'name': label, 'status': 'reused'}), flush=True)
+                    continue
             salt = secrets.token_hex(12)
             signature = hashlib.md5((credentials['password'] + salt).encode()).hexdigest()
             params = dict(u=credentials['username'], s=salt, t=signature, v='1.16.1',
@@ -179,7 +240,18 @@ def export_playlist(playlist_name, output_dir, ffmpeg_name='ffmpeg', ffprobe_nam
         }
         (staging / 'export.json').write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        staging.rename(destination)
+        if extend_existing:
+            previous = output_dir / f'.{safe_name}-previous-{secrets.token_hex(6)}'
+            destination.rename(previous)
+            try:
+                staging.rename(destination)
+            except Exception:
+                previous.rename(destination)
+                raise
+            else:
+                shutil.rmtree(previous)
+        else:
+            staging.rename(destination)
         progress.update({'status': 'complete', 'output': str(destination), 'bytes': manifest['bytes']})
         write_progress()
         print(json.dumps({'status': 'complete', 'output': str(destination),
@@ -198,8 +270,14 @@ def main():
         help='Directory that will hold the named export folder')
     parser.add_argument('--ffmpeg', default=os.environ.get('FFMPEG', 'ffmpeg'))
     parser.add_argument('--ffprobe', default=os.environ.get('FFPROBE', 'ffprobe'))
+    parser.add_argument('--resume-dir', help='Existing interrupted staging folder to verify and resume')
+    parser.add_argument('--skip-id', action='append', default=[],
+                        help='Navidrome song ID to omit (may be supplied more than once)')
+    parser.add_argument('--extend-existing', action='store_true',
+                        help='Verify and extend the existing named export atomically')
     args = parser.parse_args()
-    export_playlist(args.playlist, args.output_dir, args.ffmpeg, args.ffprobe)
+    export_playlist(args.playlist, args.output_dir, args.ffmpeg, args.ffprobe,
+                    args.resume_dir, args.skip_id, args.extend_existing)
 
 
 if __name__ == '__main__':

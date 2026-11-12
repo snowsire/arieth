@@ -171,14 +171,27 @@ used by the playlist tools:
 $env:NAVIDROME_DATA_DIR = 'C:\path\to\your\navidrome-data'
 $env:NAVIDROME_WATCH_EXPORT_DIR = 'D:\NativeAI\watch-exports'
 python export-watch-playlist.py "2005 Never Ended"
+
+# Resume a specific hidden staging folder after inspecting it:
+python export-watch-playlist.py "2005 Never Ended" --resume-dir 'D:\NativeAI\watch-exports\.2005 Never Ended-abc123'
+
+# Verify and atomically extend an existing export after the playlist grows:
+python export-watch-playlist.py "2005 Never Ended" --extend-existing
+
+# Omit a known incompatible Navidrome track ID (repeat for multiple IDs):
+python export-watch-playlist.py "2005 Never Ended" --skip-id 'track-id'
 ```
 
 The named bundle contains the MP3 files, both playlist formats and manifest.
 The default output is ignored `navidrome/local/watch-exports`; set
 `NAVIDROME_WATCH_EXPORT_DIR` or pass `--output-dir` to place it elsewhere. The
-exporter refuses to overwrite an existing bundle. An interrupted export keeps
-its hidden staging folder and progress report for inspection; it does not
-publish a partial bundle as complete.
+exporter refuses to overwrite an existing bundle unless `--extend-existing` is
+used. Extension verifies the prior manifest and hashes, reuses only tracks that
+still have the same identity and position, and swaps the completed staging
+folder into place. `--resume-dir` verifies reusable MP3s in one named hidden
+staging folder and replaces invalid files. Resume and extension are mutually
+exclusive. An interrupted export keeps its hidden staging folder and progress
+report for inspection; it never publishes a partial bundle as complete.
 
 `transfer-watch-playlist.ps1` copies one completed bundle to a Garmin's
 `Primary/Music/<playlist>` folder over USB/MTP. It checks the source hashes,
