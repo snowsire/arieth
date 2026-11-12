@@ -16,13 +16,13 @@ That describes the initial hand-picked seed lists. The current server uses the s
 
 ## Smarter playlists
 
-The five genre mixes now choose 40 FLAC tracks from the wider catalogs of their original artist rosters. They exclude missing files, tracks shorter than 90 seconds or longer than 15 minutes, songs played in the last three days, and tracks/artists you rated 1â€“2 stars. Unrated music remains eligible. Selection is random within each pool, so deeper cuts can join the original anthems.
+The five genre mixes now choose 40 FLAC tracks from the wider catalogs of their original artist rosters. They exclude missing files, tracks shorter than 90 seconds or longer than 15 minutes, songs played in the last three days, and tracks/artists you rated 1–2 stars. Unrated music remains eligible. Selection is random within each pool, so deeper cuts can join the original anthems.
 
 Native rules select unique library entries; different editions of the same recording can still appear, and random selection does not enforce a fixed per-artist quota.
 
-Your Daily Mix uses those artist rosters directly, your editable playlist, loved tracks/albums/artists, highly rated songs, and artists you have played. It prefers loved tracks first, then higher track ratings, with random ties. Its tracks remain 2â€“10 minutes long and have the same three-day cooldown and low-rating exclusions. No favorites are required to get a full mix.
+Your Daily Mix uses those artist rosters directly, your editable playlist, loved tracks/albums/artists, highly rated songs, and artists you have played. It prefers loved tracks first, then higher track ratings, with random ties. Its tracks remain 2–10 minutes long and have the same three-day cooldown and low-rating exclusions. No favorites are required to get a full mix.
 
-Each mix stays stable for 24 hours after evaluation, then refreshes the next time a client accesses it. This is a rolling interval, not a midnight job. Navidrome evaluates the rules; the laptop does not need a scheduled task. Play counts and ratings belong to the playlist owner's account, so use that same account in all clients. Favorite a song to promote it in Daily Mix; rate unwanted tracks or artists 1â€“2 stars to exclude them at the next refresh. The current selection can remain cached until the daily interval expires. [Navidrome documents the refresh behavior and supported rules](https://www.navidrome.org/docs/usage/features/smart-playlists/).
+Each mix stays stable for 24 hours after evaluation, then refreshes the next time a client accesses it. This is a rolling interval, not a midnight job. Navidrome evaluates the rules; the laptop does not need a scheduled task. Play counts and ratings belong to the playlist owner's account, so use that same account in all clients. Favorite a song to promote it in Daily Mix; rate unwanted tracks or artists 1–2 stars to exclude them at the next refresh. The current selection can remain cached until the daily interval expires. [Navidrome documents the refresh behavior and supported rules](https://www.navidrome.org/docs/usage/features/smart-playlists/).
 
 Smart playlists are edited through their rules in Feishin, rather than adding/reordering individual tracks. **shot yourself in the foot again** remains a regular playlist for manual additions. Playlist IDs, names, ownership, and visibility are preserved, and M3U auto-import stays disabled.
 
@@ -228,4 +228,3 @@ python navidrome/create-flac-mixes.py --create
 The playlists are private to the configured account and stored on the server, rather than in one player's local library. Use that same account in Feishin and Symfonium. Refresh Feishin's Playlists view and sync the Navidrome provider in Symfonium if their lists are cached. The scripts check the shared API using both client identifiers; this does not operate or verify the actual phone app.
 
 Automatic M3U imports are disabled in the current local setup. These tools create playlists directly through the server API and do not modify that setting, the database, or music files. The existing installation, credentials, and already-created playlists stay in place.
-
